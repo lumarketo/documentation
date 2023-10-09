@@ -1,0 +1,20 @@
+---
+title: Autenticación
+description: 
+---
+
+## 1. Obtenga su token de acceso
+
+Solicita a soporte su token de acceso
+
+## 2. Incluir token de acceso
+
+Debe incluir un token de acceso en el encabezado de **'Authorization'** en todas las solicitudes.
+
+###### Ejemplo.
+
+```ts showLineNumbers /appDir: true/
+curl -v -X GET
+    --url 'https://api.lumarketo.cl/public/order/all'
+    --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
+```

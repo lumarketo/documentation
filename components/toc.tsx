@@ -31,7 +31,7 @@ export function DashboardTableOfContents({ toc }: TocProps) {
 
   return mounted ? (
     <div className="space-y-2">
-      <p className="font-medium">On This Page</p>
+      <p className="font-medium">Índice</p>
       <Tree tree={toc} activeItem={activeHeading} />
     </div>
   ) : null
@@ -49,7 +49,7 @@ function useActiveItem(itemIds: (string | undefined)[]) {
           }
         })
       },
-      { rootMargin: `0% 0% -80% 0%` }
+      { rootMargin: `0% 0% -50% 0%`, threshold: 0.1 }
     )
 
     itemIds?.forEach((id) => {

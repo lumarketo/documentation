@@ -1,0 +1,178 @@
+---
+title: Autenticación
+description: 
+---
+
+## Obtener orden 
+
+**URL**: `/order/`
+
+**Método**: `GET`
+
+**Autenticación requerida**: Si
+
+**Parámetros de consulta**: `orderNumber=[number]` 
+
+**Parámetros**
+
+```json
+{}
+```
+
+**Ejemplo.**
+
+```ts showLineNumbers /appDir: true/
+curl -v -X GET
+    --url 'https://api.lumarketo.cl/public/order?orderNumber=15'
+    --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
+```
+### Respuestas
+#### Éxito
+
+**Código** : `200 OK`
+
+**Ejemplo.**
+
+```json
+{
+    "success": true,
+    "message": "Orden encontrada",
+    "data": {
+        "orderNumber": 15,
+        "coupons": [],
+        "createdDate": "2023-10-06T17:37:14-03:00",
+        "user": {
+            "rut": "111111111",
+            "fullName": "xxxxxxxx",
+            "tlf": "+56 55 55 555",
+            "email": "xxxxxxxx@gmail.com"
+        },
+        "address": {
+            "lat": -33.447844,
+            "lng": -70.64068999999999,
+            "address": "Manuel Antonio Tocornal 343, Santiago, Chile",
+            "streetNumber": "343",
+            "streetAddress": "Manuel Antonio Tocornal",
+            "country": "Chile",
+            "state": "Región Metropolitana",
+            "city": "Santiago",
+            "zipCode": "No disponible",
+            "details": "12"
+        },
+        "payment": {
+            "total": 11291,
+            "shippingCost": 1350,
+            "method": "getnet"
+        },
+        "subsidiary": {
+            "id": "645e4e1a05a0bbc8fe2073fc",
+            "name": "xxxxxxxx",
+            "manager": "xxxxxxxx",
+            "address": {
+                "lat": -33.44784399999999,
+                "lng": -70.64068999999999,
+                "address": "Manuel Antonio Tocornal 343, Santiago, Chile",
+                "streetNumber": "343",
+                "streetAddress": "Manuel Antonio Tocornal",
+                "country": "Chile",
+                "state": "Región Metropolitana",
+                "city": "Santiago",
+                "zipCode": "8330312",
+                "details": "dpto 311"
+            },
+            "tlf": "+58958765629"
+        },
+        "items": [
+            {
+                "quantity": 1,
+                "price": 1500,
+                "bestPrice": 1350,
+                "instructions": "",
+                "additionals": [],
+                "name": "Lata de coca cola Zero 355 ml",
+                "sku": "17",
+                "barcode": "",
+                "promotion": {
+                    "title": "ee",
+                    "value": 10,
+                    "type": "ALL",
+                    "cumulative": true,
+                    "useAmountLimit": false,
+                    "amountLimit": 0,
+                    "useDiscountAmount": false
+                },
+                "withDiscount": false,
+                "discount": 0
+            },
+            {
+                "quantity": 1,
+                "price": 2000,
+                "bestPrice": 1800,
+                "instructions": "",
+                "additionals": [],
+                "name": "Coca Cola de 955 ml",
+                "sku": "50",
+                "promotion": {
+                    "title": "ee",
+                    "value": 10,
+                    "type": "ALL",
+                    "cumulative": true,
+                    "useAmountLimit": false,
+                    "amountLimit": 0,
+                    "useDiscountAmount": false
+                },
+                "withDiscount": false,
+                "discount": 0
+            },
+            {
+                "quantity": 1,
+                "price": 6990,
+                "bestPrice": 6291,
+                "instructions": "",
+                "additionals": [
+                    {
+                        "name": "pimentón extra",
+                        "price": 500
+                    },
+                    {
+                        "name": "Mozarella",
+                        "price": 0
+                    }
+                ],
+                "name": "Pizza Americana",
+                "sku": "30",
+                "barcode": "",
+                "promotion": {
+                    "title": "ee",
+                    "value": 10,
+                    "type": "ALL",
+                    "cumulative": true,
+                    "useAmountLimit": false,
+                    "amountLimit": 0,
+                    "useDiscountAmount": false
+                },
+                "withDiscount": false,
+                "discount": 0
+            }
+        ]
+    }
+}
+```
+
+#### Error
+
+**Condición** : Sí el token de acceso es inválido o ya ha realizado más de una vez la solicitud dentro del tiempo límite.
+
+**Código** : `403 FORBIDDEN`
+
+**Ejemplo.**
+
+```json
+{
+    "message": "User is not authorized to access this resource with an explicit deny"
+}
+```
+
+## Obtener ordenes por fecha
+
+Debe incluir un token de acceso en el encabezado de **'authorization'** en todas las solicitudes.

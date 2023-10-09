@@ -5,7 +5,7 @@ export const docsConfig: DocsConfig = {
     {
       title: "Documentación",
       href: "/docs",
-    },
+    }
   ],
   sidebarNav: [
     {
@@ -23,6 +23,10 @@ export const docsConfig: DocsConfig = {
         {
           title: "Autenticación",
           href: "/docs/authentication",
+        },
+        {
+          title: "Ordenes",
+          href: "/docs/order",
         },
       ],
     },
