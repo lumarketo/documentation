@@ -7,6 +7,7 @@ import { MainNav } from "@/components/main-nav"
 import { DocsSearch } from "@/components/search"
 import { DocsSidebarNav } from "@/components/sidebar-nav"
 import { SiteFooter } from "@/components/site-footer"
+import { ModeToggle } from "@/components/mode-toggle"
 
 interface DocsLayoutProps {
   children: React.ReactNode
@@ -22,17 +23,10 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
           </MainNav>
           <div className="flex flex-1 items-center space-x-4 sm:justify-end">
             <div className="flex-1 sm:grow-0">
-              <DocsSearch />
+              {/* <DocsSearch /> */}
             </div>
             <nav className="flex space-x-4">
-              <Link
-                href={siteConfig.links.github}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Icons.gitHub className="h-7 w-7" />
-                <span className="sr-only">GitHub</span>
-              </Link>
+              <ModeToggle />
             </nav>
           </div>
         </div>
