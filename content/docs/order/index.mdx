@@ -1,23 +1,67 @@
 ---
 title: Autenticación
-description: 
+description:
 ---
 
-## Obtener orden 
+import { ResponseAccordionComponent } from "@/components/css/accordion"
+import { JsonViewer, ObjectInfoCard } from "@/components/css/card"
 
-**URL**: `/order/`
+## Obtener orden
 
-**Método**: `GET`
+<div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
+  <div
+    style={{
+      display: "inline-flex",
+      flexDirection: "row",
+      backgroundColor: "green",
+      border: "none",
+      cursor: "default",
+      height: "20px",
+      outline: "none",
+      padding: 0,
+      fontSize: "10px",
+      fontFamily: "Open Sans, sans-serif",
+      whiteSpace: "nowrap",
+      alignItems: "center",
+      borderRadius: "16px",
+      verticalAlign: "middle",
+      textDecoration: "none",
+      justifyContent: "center",
+      width: "auto",
+    }}
+  >
+    <div
+      style={{
+        cursor: "inherit",
+        display: "flex",
+        alignItems: "center",
+        userSelect: "none",
+        whiteSpace: "nowrap",
+        paddingLeft: "12px",
+        paddingRight: "12px",
+        fontWeight: 600,
+        color: "#fff",
+      }}
+    >
+      GET
+    </div>
+  </div>
+  <h6
+    style={{ fontSize: 14, height: 30, marginLeft: 5, textDecoration: "none" }}
+  >
+    https://api.lumarketo.cl/public/order
+  </h6>
+</div>
+Debe incluir un token de acceso en el encabezado de **'Authorization'** en todas
+las solicitudes.
 
-**Autenticación requerida**: Si
+**Parámetros de consulta**
 
-**Parámetros de consulta**: `orderNumber=[number]` 
-
-**Parámetros**
-
-```json
-{}
-```
+<ObjectInfoCard
+  title="orderNumber"
+  type="number"
+  description="N° de orden del restaurant"
+/>
 
 **Ejemplo.**
 
@@ -26,153 +70,534 @@ curl -v -X GET
     --url 'https://api.lumarketo.cl/public/order?orderNumber=15'
     --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
 ```
+
 ### Respuestas
-#### Éxito
 
-**Código** : `200 OK`
+<ResponseAccordionComponent
+  items={[
+    {
+      title: "200 Success",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="success"
+            type="boolean"
+            description="Indica si la solicitud fue sastifactoria"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="data"
+            type="object"
+            description="Contiene la información de la orden"
+            required={false}
+            content={
+              <>
+                <ObjectInfoCard
+                  title="orderNumber"
+                  type="number"
+                  description="N° de orden del restaurant"
+                />
+                <ObjectInfoCard
+                  title="coupons"
+                  type="array"
+                  description="Cupones utilizados en la orden"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="title"
+                        type="string"
+                        description="Nombre del cupón"
+                      />
+                      <ObjectInfoCard
+                        title="value"
+                        type="number"
+                        description="Valor del cupón"
+                      />
+                      <ObjectInfoCard
+                        title="coupon"
+                        type="string"
+                        description="Código del cupón"
+                      />
+                      <ObjectInfoCard
+                        title="cumulative"
+                        type="boolean"
+                        description="Al activar el cupón acumulable, le das al usuario la posibilidad de acumular este cupón con otros descuentos y cupones dentro de tu tienda web."
+                      />
+                      <ObjectInfoCard
+                        title="useAmountLimit"
+                        type="boolean"
+                        description="Al activar el monto límite, el cupón solo será valido si el usuario compra un monto determinado dentro de tu tienda web."
+                      />
+                      <ObjectInfoCard
+                        title="amountLimit"
+                        type="number"
+                        description="Monto límite"
+                        required={false}
+                      />
+                      <ObjectInfoCard
+                        title="useWithShipping"
+                        type="boolean"
+                        description="Aplicar descuento sobre el precio del envío"
+                        required={false}
+                      />
+                      <ObjectInfoCard
+                        title="useDiscountAmount"
+                        type="boolean"
+                        description="Al activar el monto fijo, el cupón dejara de descontar un porcentaje del total del pedido y pasará a descontar directamente el monto indicado."
+                        required={false}
+                      />
+                    </>
+                  }
+                />
+                <ObjectInfoCard
+                  title="createdDate"
+                  type="string"
+                  description="Fecha de creación de la orden"
+                />
+                <ObjectInfoCard
+                  title="orderNumber"
+                  type="number"
+                  description="N° de orden del restaurant"
+                />
+                <ObjectInfoCard
+                  title="user"
+                  type="object"
+                  description="Objeto con información del cliente"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="rut"
+                        type="string"
+                        description="RUT del cliente"
+                      />
+                      <ObjectInfoCard
+                        title="fullName"
+                        type="string"
+                        description="Nombre completo del cliente"
+                      />
+                      <ObjectInfoCard
+                        title="tlf"
+                        type="string"
+                        description="Número de teléfono del cliente"
+                      />
+                      <ObjectInfoCard
+                        title="email"
+                        type="string"
+                        description="Correo electrónico del cliente"
+                      />
+                    </>
+                  }
+                />
+                <ObjectInfoCard
+                  title="address"
+                  type="object"
+                  description="Objeto con información de la dirección de despacho"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="lat"
+                        type="number"
+                        description="Latitud"
+                      />
+                      <ObjectInfoCard
+                        title="lng"
+                        type="string"
+                        description="Longitud"
+                      />
+                      <ObjectInfoCard
+                        title="address"
+                        type="string"
+                        description="Dirección del envío"
+                      />
+                      <ObjectInfoCard
+                        title="streetNumber"
+                        type="string"
+                        description="Número de calle"
+                      />
+                      <ObjectInfoCard
+                        title="country"
+                        type="string"
+                        description="País"
+                      />
+                      <ObjectInfoCard
+                        title="state"
+                        type="string"
+                        description="Región"
+                      />
+                      <ObjectInfoCard
+                        title="city"
+                        type="string"
+                        description="Comuna"
+                      />
+                      <ObjectInfoCard
+                        title="zipCode"
+                        type="string"
+                        description="Código postal"
+                      />
+                      <ObjectInfoCard
+                        title="details"
+                        type="string"
+                        description="Detalles de la dirección"
+                      />
+                    </>
+                  }
+                />
+                <ObjectInfoCard
+                  title="payment"
+                  type="object"
+                  description="Objeto con información del pago"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="total"
+                        type="number"
+                        description="Total pagado por el cliente"
+                      />
+                      <ObjectInfoCard
+                        title="shippingCost"
+                        type="number"
+                        description="Costo del envío"
+                      />
+                      <ObjectInfoCard
+                        title="method"
+                        type="string"
+                        description="Método de pago utilizado"
+                      />
+                    </>
+                  }
+                />
+                <ObjectInfoCard
+                  title="subsidiary"
+                  type="object"
+                  description="Objeto con información de la sucursal"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="id"
+                        type="string"
+                        description="ID de la sucursal"
+                      />
 
-**Ejemplo.**
+                      <ObjectInfoCard
+                        title="name"
+                        type="string"
+                        description="Nombre de la sucursal"
+                      />
+                      <ObjectInfoCard
+                        title="manager"
+                        type="string"
+                        description="Manager de la sucursal"
+                      />
+                      <ObjectInfoCard
+                        title="tlf"
+                        type="string"
+                        description="Teléfono de la sucursal"
+                      />
 
-```json
-{
-    "success": true,
-    "message": "Orden encontrada",
-    "data": {
-        "orderNumber": 15,
-        "coupons": [],
-        "createdDate": "2023-10-06T17:37:14-03:00",
-        "user": {
-            "rut": "111111111",
-            "fullName": "xxxxxxxx",
-            "tlf": "+56 55 55 555",
-            "email": "xxxxxxxx@gmail.com"
-        },
-        "address": {
-            "lat": -33.447844,
-            "lng": -70.64068999999999,
-            "address": "Manuel Antonio Tocornal 343, Santiago, Chile",
-            "streetNumber": "343",
-            "streetAddress": "Manuel Antonio Tocornal",
-            "country": "Chile",
-            "state": "Región Metropolitana",
-            "city": "Santiago",
-            "zipCode": "No disponible",
-            "details": "12"
-        },
-        "payment": {
-            "total": 11291,
-            "shippingCost": 1350,
-            "method": "getnet"
-        },
-        "subsidiary": {
-            "id": "645e4e1a05a0bbc8fe2073fc",
-            "name": "xxxxxxxx",
-            "manager": "xxxxxxxx",
-            "address": {
-                "lat": -33.44784399999999,
-                "lng": -70.64068999999999,
-                "address": "Manuel Antonio Tocornal 343, Santiago, Chile",
-                "streetNumber": "343",
-                "streetAddress": "Manuel Antonio Tocornal",
-                "country": "Chile",
-                "state": "Región Metropolitana",
-                "city": "Santiago",
-                "zipCode": "8330312",
-                "details": "dpto 311"
-            },
-            "tlf": "+58958765629"
-        },
-        "items": [
-            {
-                "quantity": 1,
-                "price": 1500,
-                "bestPrice": 1350,
-                "instructions": "",
-                "additionals": [],
-                "name": "Lata de coca cola Zero 355 ml",
-                "sku": "17",
-                "barcode": "",
-                "promotion": {
-                    "title": "ee",
-                    "value": 10,
-                    "type": "ALL",
-                    "cumulative": true,
-                    "useAmountLimit": false,
-                    "amountLimit": 0,
-                    "useDiscountAmount": false
-                },
-                "withDiscount": false,
-                "discount": 0
-            },
-            {
-                "quantity": 1,
-                "price": 2000,
-                "bestPrice": 1800,
-                "instructions": "",
-                "additionals": [],
-                "name": "Coca Cola de 955 ml",
-                "sku": "50",
-                "promotion": {
-                    "title": "ee",
-                    "value": 10,
-                    "type": "ALL",
-                    "cumulative": true,
-                    "useAmountLimit": false,
-                    "amountLimit": 0,
-                    "useDiscountAmount": false
-                },
-                "withDiscount": false,
-                "discount": 0
-            },
-            {
-                "quantity": 1,
-                "price": 6990,
-                "bestPrice": 6291,
-                "instructions": "",
-                "additionals": [
-                    {
-                        "name": "pimentón extra",
-                        "price": 500
-                    },
-                    {
-                        "name": "Mozarella",
-                        "price": 0
-                    }
-                ],
-                "name": "Pizza Americana",
-                "sku": "30",
-                "barcode": "",
-                "promotion": {
-                    "title": "ee",
-                    "value": 10,
-                    "type": "ALL",
-                    "cumulative": true,
-                    "useAmountLimit": false,
-                    "amountLimit": 0,
-                    "useDiscountAmount": false
-                },
-                "withDiscount": false,
-                "discount": 0
+                      <ObjectInfoCard
+                        title="address"
+                        type="object"
+                        description="Objeto con información de la dirección de despacho"
+                        content={
+                          <>
+                            <ObjectInfoCard
+                              title="lat"
+                              type="number"
+                              description="Latitud"
+                            />
+                            <ObjectInfoCard
+                              title="lng"
+                              type="string"
+                              description="Longitud"
+                            />
+                            <ObjectInfoCard
+                              title="address"
+                              type="string"
+                              description="Dirección del envío"
+                            />
+                            <ObjectInfoCard
+                              title="streetNumber"
+                              type="string"
+                              description="Número de calle"
+                            />
+                            <ObjectInfoCard
+                              title="country"
+                              type="string"
+                              description="País"
+                            />
+                            <ObjectInfoCard
+                              title="state"
+                              type="string"
+                              description="Región"
+                            />
+                            <ObjectInfoCard
+                              title="city"
+                              type="string"
+                              description="Comuna"
+                            />
+                            <ObjectInfoCard
+                              title="zipCode"
+                              type="string"
+                              description="Código postal"
+                            />
+                            <ObjectInfoCard
+                              title="details"
+                              type="string"
+                              description="Detalles de la dirección"
+                            />
+                          </>
+                        }
+                      />
+                    </>
+                  }
+                />
+                <ObjectInfoCard
+                  title="items"
+                  type="array"
+                  description="Arreglo con los artículos de la orden"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="quantity"
+                        type="number"
+                        description="Cantidad del artículo"
+                      />
+                      <ObjectInfoCard
+                        title="price"
+                        type="number"
+                        description="Precio del artículo sin descuento aplicado"
+                      />
+                      <ObjectInfoCard
+                        title="bestPrice"
+                        type="number"
+                        description="Precio del artículo con descuento aplicado"
+                      />
+                      <ObjectInfoCard
+                        title="instructions"
+                        type="string"
+                        description="Instrucciones para la preparación"
+                      />
+                      <ObjectInfoCard
+                        title="additionals"
+                        type="array"
+                        description="Arreglo con los adicionales"
+                        content={
+                          <>
+                            <ObjectInfoCard
+                              title="name"
+                              type="string"
+                              description="Nombre del adicional"
+                            />
+                            <ObjectInfoCard
+                              title="price"
+                              type="number"
+                              description="Precio del adicional"
+                            />
+                          </>
+                        }
+                      />
+                      <ObjectInfoCard
+                        title="name"
+                        type="string"
+                        description="Nombre del artículo"
+                      />
+                      <ObjectInfoCard
+                        title="sku"
+                        type="string"
+                        description="SKU del artículo"
+                      />
+                      <ObjectInfoCard
+                        title="barcode"
+                        type="string"
+                        description="Código de barra del artículo"
+                      />
+                      <ObjectInfoCard
+                        title="withDiscount"
+                        type="boolean"
+                        description="Indica si el artículo tiene descuento propio"
+                      />
+                      <ObjectInfoCard
+                        title="discount"
+                        type="boolean"
+                        description="Valor del descuento en  %"
+                      />
+                      <ObjectInfoCard
+                        title="promotion"
+                        type="array"
+                        description="Cupones utilizados en la orden"
+                        content={
+                          <>
+                            <ObjectInfoCard
+                              title="title"
+                              type="string"
+                              description="Nombre del cupón"
+                            />
+                            <ObjectInfoCard
+                              title="value"
+                              type="number"
+                              description="Valor del cupón"
+                            />
+                            <ObjectInfoCard
+                              title="type"
+                              type="string"
+                              description={`
+                                    Indica el tipo de descuento.
+                                      "CATEGORY": Descuento sobre categoría
+                                      "BRAND": Descuento sobre marca
+                                      "SKU": Descuento sobre SKUs
+                                      "ALL": Descuento sobre todo el restaurant
+                                      "COLLECTIONS": Descuento sobre colección                       
+                              `}
+                            />
+                            <ObjectInfoCard
+                              title="coupon"
+                              type="string"
+                              description="Código del cupón"
+                            />
+                            <ObjectInfoCard
+                              title="cumulative"
+                              type="boolean"
+                              description="Al activar el cupón acumulable, le das al usuario la posibilidad de acumular este cupón con otros descuentos y cupones dentro de tu tienda web."
+                            />
+                            <ObjectInfoCard
+                              title="useAmountLimit"
+                              type="boolean"
+                              description="Al activar el monto límite, el cupón solo será valido si el usuario compra un monto determinado dentro de tu tienda web."
+                            />
+                            <ObjectInfoCard
+                              title="amountLimit"
+                              type="number"
+                              description="Monto límite"
+                              required={false}
+                            />
+                            <ObjectInfoCard
+                              title="useWithShipping"
+                              type="boolean"
+                              description="Aplicar descuento sobre el precio del envío"
+                              required={false}
+                            />
+                            <ObjectInfoCard
+                              title="useDiscountAmount"
+                              type="boolean"
+                              description="Al activar el monto fijo, el cupón dejara de descontar un porcentaje del total del pedido y pasará a descontar directamente el monto indicado."
+                              required={false}
+                            />
+                          </>
+                        }
+                      />
+                    </>
+                  }
+                />
+              </>
             }
-        ]
-    }
-}
-```
+          />
+        </>
+      ),
+    },
+    {
+      title: "400 Bad Request",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="success"
+            type="boolean"
+            description="Indica si la solicitud fue sastifactoria"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="data"
+            type="object"
+            description="Contiene la información de la orden"
+            required={false}
+          />
+        </>
+      ),
+    },
+    {
+      title: "403 Forbidden",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+            required={false}
+          />
+        </>
+      ),
+    },
+  ]}
+/>
 
 #### Error
 
 **Condición** : Sí el token de acceso es inválido o ya ha realizado más de una vez la solicitud dentro del tiempo límite.
 
-**Código** : `403 FORBIDDEN`
-
-**Ejemplo.**
-
-```json
-{
-    "message": "User is not authorized to access this resource with an explicit deny"
-}
-```
-
 ## Obtener ordenes por fecha
 
-Debe incluir un token de acceso en el encabezado de **'authorization'** en todas las solicitudes.
+<div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
+  <div
+    style={{
+      display: "inline-flex",
+      flexDirection: "row",
+      backgroundColor: "green",
+      border: "none",
+      cursor: "default",
+      height: "20px",
+      outline: "none",
+      padding: 0,
+      fontSize: "10px",
+      fontFamily: "Open Sans, sans-serif",
+      whiteSpace: "nowrap",
+      alignItems: "center",
+      borderRadius: "16px",
+      verticalAlign: "middle",
+      textDecoration: "none",
+      justifyContent: "center",
+      width: "auto",
+    }}
+  >
+    <div
+      style={{
+        cursor: "inherit",
+        display: "flex",
+        alignItems: "center",
+        userSelect: "none",
+        whiteSpace: "nowrap",
+        paddingLeft: "12px",
+        paddingRight: "12px",
+        fontWeight: 600,
+        color: "#fff",
+      }}
+    >
+      GET
+    </div>
+  </div>
+  <h6
+    style={{ fontSize: 14, height: 30, marginLeft: 5, textDecoration: "none" }}
+  >
+    https://api.lumarketo.cl/public/order
+  </h6>
+</div>
+Debe incluir un token de acceso en el encabezado de **'Authorization'** en todas
+las solicitudes.
+
+**Parámetros de consulta**
+
+<ObjectInfoCard
+  title="orderNumber"
+  type="number"
+  description="N° de orden del restaurant"
+/>

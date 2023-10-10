@@ -79,3 +79,47 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+.accordionContainer {
+  margin-top: 10px;
+}
+
+.accordion {
+  background-color: rgb(243 243 243 / 5%);
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: 1px solid #d3d3d3;
+  outline: none;
+  transition: 0.4s;
+  /* border-radius: 5px 5px 0px 0px; */
+  border-bottom: none;
+}
+
+.accordionContainer > .accordion:first-of-type {
+  border-radius: 10px 10px 0px 0px;
+}
+
+.accordionContainer > .panel:last-of-type {
+  border-radius: 0px 0px 10px 10px;
+}
+
+.accordionContainer > .accordion {
+  border: 1px solid #d3d3d3;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.accordion:hover {
+  background-color: rgb(243 243 243 / 10%);
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 18px;
+  background-color: rgb(243 243 243 / 15%);
+  display: none;
+  overflow: hidden;
+  border: 0.1px solid #d3d3d3;
+}
