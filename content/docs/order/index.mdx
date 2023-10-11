@@ -371,23 +371,23 @@ curl -v -X GET
                 <ObjectInfoCard
                   title="items"
                   type="array"
-                  description="Arreglo con los produtos de la orden"
+                  description="Arreglo con los productos de la orden"
                   content={
                     <>
                       <ObjectInfoCard
                         title="quantity"
                         type="number"
-                        description="Cantidad del produto"
+                        description="Cantidad del producto"
                       />
                       <ObjectInfoCard
                         title="price"
                         type="number"
-                        description="Precio del produto sin descuento aplicado"
+                        description="Precio del producto sin descuento aplicado"
                       />
                       <ObjectInfoCard
                         title="bestPrice"
                         type="number"
-                        description="Precio del produto con descuento aplicado"
+                        description="Precio del producto con descuento aplicado"
                       />
                       <ObjectInfoCard
                         title="instructions"
@@ -416,22 +416,22 @@ curl -v -X GET
                       <ObjectInfoCard
                         title="name"
                         type="string"
-                        description="Nombre del produto"
+                        description="Nombre del producto"
                       />
                       <ObjectInfoCard
                         title="sku"
                         type="string"
-                        description="SKU del produto"
+                        description="SKU del producto"
                       />
                       <ObjectInfoCard
                         title="barcode"
                         type="string"
-                        description="Código de barra del produto"
+                        description="Código de barra del producto"
                       />
                       <ObjectInfoCard
                         title="withDiscount"
                         type="boolean"
-                        description="Indica si el produto tiene descuento propio"
+                        description="Indica si el producto tiene descuento propio"
                       />
                       <ObjectInfoCard
                         title="discount"
@@ -542,6 +542,18 @@ curl -v -X GET
           />
         </>
       ),
+    },
+    {
+      title: "401 Unauthorized",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+          />
+        </>
+      )
     }
 
 ]}
@@ -910,23 +922,23 @@ curl -v -X GET
                 <ObjectInfoCard
                   title="items"
                   type="array"
-                  description="Arreglo con los produtos de la orden"
+                  description="Arreglo con los productos de la orden"
                   content={
                     <>
                       <ObjectInfoCard
                         title="quantity"
                         type="number"
-                        description="Cantidad del produto"
+                        description="Cantidad del producto"
                       />
                       <ObjectInfoCard
                         title="price"
                         type="number"
-                        description="Precio del produto sin descuento aplicado"
+                        description="Precio del producto sin descuento aplicado"
                       />
                       <ObjectInfoCard
                         title="bestPrice"
                         type="number"
-                        description="Precio del produto con descuento aplicado"
+                        description="Precio del producto con descuento aplicado"
                       />
                       <ObjectInfoCard
                         title="instructions"
@@ -955,22 +967,22 @@ curl -v -X GET
                       <ObjectInfoCard
                         title="name"
                         type="string"
-                        description="Nombre del produto"
+                        description="Nombre del producto"
                       />
                       <ObjectInfoCard
                         title="sku"
                         type="string"
-                        description="SKU del produto"
+                        description="SKU del producto"
                       />
                       <ObjectInfoCard
                         title="barcode"
                         type="string"
-                        description="Código de barra del produto"
+                        description="Código de barra del producto"
                       />
                       <ObjectInfoCard
                         title="withDiscount"
                         type="boolean"
-                        description="Indica si el produto tiene descuento propio"
+                        description="Indica si el producto tiene descuento propio"
                       />
                       <ObjectInfoCard
                         title="discount"
@@ -1072,6 +1084,18 @@ curl -v -X GET
     },
     {
       title: "403 Forbidden",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+          />
+        </>
+      )
+    },
+    {
+      title: "401 Unauthorized",
       content: (
         <>
           <ObjectInfoCard

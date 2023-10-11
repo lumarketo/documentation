@@ -57,11 +57,11 @@ las solicitudes.
 
 **Cuerpo de la consulta**
 
-<ObjectInfoCard title="sku" type="number" description="SKU del produto" />
+<ObjectInfoCard title="sku" type="number" description="SKU del producto" />
 <ObjectInfoCard
   title="price"
   type="number"
-  description="Precio del produto"
+  description="Precio del producto"
   required={false}
 />
 <ObjectInfoCard
@@ -79,7 +79,7 @@ las solicitudes.
       <ObjectInfoCard
         title="qty"
         type="number"
-        description="Cantidad del produto"
+        description="Cantidad del producto"
       />
     </>
   }
@@ -160,7 +160,19 @@ curl -v -X PUT
           />
         </>
       ),
-    },
+    },   
+    {
+      title: "401 Unauthorized",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+          />
+        </>
+      )
+    }
 
 ]}
 />
