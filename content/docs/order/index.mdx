@@ -8,52 +8,66 @@ import { JsonViewer, ObjectInfoCard } from "@/components/css/card"
 
 ## Obtener orden
 
-<div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
-  <div
-    style={{
-      display: "inline-flex",
-      flexDirection: "row",
-      backgroundColor: "green",
-      border: "none",
-      cursor: "default",
-      height: "20px",
-      outline: "none",
-      padding: 0,
-      fontSize: "10px",
-      fontFamily: "Open Sans, sans-serif",
-      whiteSpace: "nowrap",
-      alignItems: "center",
-      borderRadius: "16px",
-      verticalAlign: "middle",
-      textDecoration: "none",
-      justifyContent: "center",
-      width: "auto",
-    }}
-  >
+<>
+  <div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
     <div
       style={{
-        cursor: "inherit",
-        display: "flex",
-        alignItems: "center",
-        userSelect: "none",
+        display: "inline-flex",
+        flexDirection: "row",
+        backgroundColor: "green",
+        border: "none",
+        cursor: "default",
+        height: "20px",
+        outline: "none",
+        padding: 0,
+        fontSize: "10px",
+        fontFamily: "Open Sans, sans-serif",
         whiteSpace: "nowrap",
-        paddingLeft: "12px",
-        paddingRight: "12px",
-        fontWeight: 600,
-        color: "#fff",
+        alignItems: "center",
+        borderRadius: "16px",
+        verticalAlign: "middle",
+        textDecoration: "none",
+        justifyContent: "center",
+        width: "auto",
       }}
     >
-      GET
+      <div
+        style={{
+          cursor: "inherit",
+          display: "flex",
+          alignItems: "center",
+          userSelect: "none",
+          whiteSpace: "nowrap",
+          paddingLeft: "12px",
+          paddingRight: "12px",
+          fontWeight: 600,
+          color: "#fff",
+        }}
+      >
+        GET
+      </div>
     </div>
+    <h6
+      style={{
+        fontSize: 14,
+        height: 30,
+        marginLeft: 5,
+        textDecoration: "none",
+      }}
+    >
+      https://api.lumarketo.cl/public/order
+    </h6>
   </div>
-  <h6
-    style={{ fontSize: 14, height: 30, marginLeft: 5, textDecoration: "none" }}
-  >
-    https://api.lumarketo.cl/public/order
-  </h6>
-</div>
+</>
 Debe incluir un token de acceso en el encabezado de **'Authorization'** en todas
 las solicitudes.
+
+**Ratelimit**
+<>
+  <p>Cada 1 segundo</p>
+</>
+
+
 
 **Parámetros de consulta**
 
@@ -607,6 +621,11 @@ curl -v -X GET
 </div>
 Debe incluir un token de acceso en el encabezado de **'Authorization'** en todas
 las solicitudes.
+
+**Ratelimit**
+<>
+  <p>Cada 10 minutos</p>
+</>
 
 **Parámetros de consulta**
 
