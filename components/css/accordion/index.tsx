@@ -33,7 +33,7 @@ const ResponseAccordionItem = ({
   const [show, setShow] = React.useState(false)
 
   return (
-    <>
+    <React.Fragment>
       <button
         className="accordion font-medium"
         style={{ fontWeight: 600 }}
@@ -44,6 +44,6 @@ const ResponseAccordionItem = ({
       <div className="panel" style={{ display: show ? "block" : "none" }}>
         {item.content}
       </div>
-    </>
+    </React.Fragment>
   )
 }

@@ -1,0 +1,223 @@
+---
+title: Sucursales
+description:
+---
+
+import { ResponseAccordionComponent } from "@/components/css/accordion"
+import { JsonViewer, ObjectInfoCard } from "@/components/css/card"
+
+## Obtener sucursales
+
+<div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
+  <div
+    style={{
+      display: "inline-flex",
+      flexDirection: "row",
+      backgroundColor: "green",
+      border: "none",
+      cursor: "default",
+      height: "20px",
+      outline: "none",
+      padding: 0,
+      fontSize: "10px",
+      fontFamily: "Open Sans, sans-serif",
+      whiteSpace: "nowrap",
+      alignItems: "center",
+      borderRadius: "16px",
+      verticalAlign: "middle",
+      textDecoration: "none",
+      justifyContent: "center",
+      width: "auto",
+    }}
+  >
+    <div
+      style={{
+        cursor: "inherit",
+        display: "flex",
+        alignItems: "center",
+        userSelect: "none",
+        whiteSpace: "nowrap",
+        paddingLeft: "12px",
+        paddingRight: "12px",
+        fontWeight: 600,
+        color: "#fff",
+      }}
+    >
+      GET
+    </div>
+  </div>
+  <h6
+    style={{ fontSize: 14, height: 30, marginLeft: 5, textDecoration: "none" }}
+  >
+    https://api.lumarketo.cl/public/subsidiary/all
+  </h6>
+</div>
+Debe incluir un token de acceso en el encabezado de **'Authorization'** en todas
+las solicitudes.
+
+**Ejemplo.**
+
+```ts showLineNumbers /appDir: true/
+curl -v -X GET
+    --url 'https://api.lumarketo.cl/public/subsidiary/all'
+    --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
+```
+
+### Respuestas
+
+<ResponseAccordionComponent
+  items={[
+    {
+      title: "200 Success",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="success"
+            type="boolean"
+            description="Indica si la solicitud fue sastifactoria"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="data"
+            type="array"
+            description="Arreglo que contiene la información de las sucursales"
+            required={false}
+            content={
+              <>
+                <ObjectInfoCard
+                  title="name"
+                  type="string"
+                  description="Nombre de la sucursal"
+                />
+                <ObjectInfoCard
+                  title="manager"
+                  type="string"
+                  description="Nombre del encargado"
+                />
+                <ObjectInfoCard
+                  title="tlf"
+                  type="string"
+                  description="Número de teléfono del encargado"
+                />
+                <ObjectInfoCard
+                  title="id"
+                  type="string"
+                  description="ID de la sucursal"
+                />
+                <ObjectInfoCard
+                  title="isOpen"
+                  type="boolean"
+                  description="Indica si la sucursal esta abierta"
+                />
+                <ObjectInfoCard
+                  title="updatedDate"
+                  type="string"
+                  description="Fecha de la última actualización"
+                />
+
+                <ObjectInfoCard
+                  title="address"
+                  type="object"
+                  description="Objeto con información de la dirección de despacho"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="lat"
+                        type="number"
+                        description="Latitud"
+                      />
+                      <ObjectInfoCard
+                        title="lng"
+                        type="string"
+                        description="Longitud"
+                      />
+                      <ObjectInfoCard
+                        title="address"
+                        type="string"
+                        description="Dirección del envío"
+                      />
+                      <ObjectInfoCard
+                        title="streetNumber"
+                        type="string"
+                        description="Número de calle"
+                      />
+                      <ObjectInfoCard
+                        title="country"
+                        type="string"
+                        description="País"
+                      />
+                      <ObjectInfoCard
+                        title="state"
+                        type="string"
+                        description="Región"
+                      />
+                      <ObjectInfoCard
+                        title="city"
+                        type="string"
+                        description="Comuna"
+                      />
+                      <ObjectInfoCard
+                        title="zipCode"
+                        type="string"
+                        description="Código postal"
+                      />
+                      <ObjectInfoCard
+                        title="details"
+                        type="string"
+                        description="Detalles de la dirección"
+                      />
+                    </>
+                  }
+                />
+              </>
+            }
+          />
+        </>
+      )
+    },
+    {
+      title: "400 Bad Request",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="success"
+            type="boolean"
+            description="Indica si la solicitud fue sastifactoria"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="data"
+            type="object"
+            description="Objecto con el error"
+            required={false}
+          />
+        </ >
+      )
+    },
+    {
+      title: "403 Forbidden",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+            required={false}
+          />
+        </>
+      )
+    }
+]}
+/>

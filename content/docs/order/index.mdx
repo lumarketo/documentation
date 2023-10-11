@@ -1,5 +1,5 @@
 ---
-title: Autenticación
+title: Ordenes
 description:
 ---
 
@@ -83,18 +83,16 @@ curl -v -X GET
             title="success"
             type="boolean"
             description="Indica si la solicitud fue sastifactoria"
-            required={false}
           />
           <ObjectInfoCard
             title="message"
             type="string"
             description="Descripción del resultado obtenido"
-            required={false}
           />
           <ObjectInfoCard
             title="data"
             type="object"
-            description="Contiene la información de la orden"
+            description="Contiene la información de la orden. Puede venir como null si la orden no es encontrada"
             required={false}
             content={
               <>
@@ -138,19 +136,16 @@ curl -v -X GET
                         title="amountLimit"
                         type="number"
                         description="Monto límite"
-                        required={false}
                       />
                       <ObjectInfoCard
                         title="useWithShipping"
                         type="boolean"
                         description="Aplicar descuento sobre el precio del envío"
-                        required={false}
                       />
                       <ObjectInfoCard
                         title="useDiscountAmount"
                         type="boolean"
                         description="Al activar el monto fijo, el cupón dejara de descontar un porcentaje del total del pedido y pasará a descontar directamente el monto indicado."
-                        required={false}
                       />
                     </>
                   }
@@ -159,11 +154,6 @@ curl -v -X GET
                   title="createdDate"
                   type="string"
                   description="Fecha de creación de la orden"
-                />
-                <ObjectInfoCard
-                  title="orderNumber"
-                  type="number"
-                  description="N° de orden del restaurant"
                 />
                 <ObjectInfoCard
                   title="user"
@@ -247,6 +237,27 @@ curl -v -X GET
                       />
                     </>
                   }
+                  required={false}
+                />
+                <ObjectInfoCard
+                  title="shipping"
+                  type="object"
+                  description="Objeto con información del envío, si este objeto no es devuelto, la orden sera retira en la sucursal"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="price"
+                        type="number"
+                        description="Precio del envío"
+                      />
+                      <ObjectInfoCard
+                        title="method"
+                        type="string"
+                        description="Método de envío utilizado"
+                      />
+                    </>
+                  }
+                  required={false}
                 />
                 <ObjectInfoCard
                   title="payment"
@@ -360,23 +371,23 @@ curl -v -X GET
                 <ObjectInfoCard
                   title="items"
                   type="array"
-                  description="Arreglo con los artículos de la orden"
+                  description="Arreglo con los produtos de la orden"
                   content={
                     <>
                       <ObjectInfoCard
                         title="quantity"
                         type="number"
-                        description="Cantidad del artículo"
+                        description="Cantidad del produto"
                       />
                       <ObjectInfoCard
                         title="price"
                         type="number"
-                        description="Precio del artículo sin descuento aplicado"
+                        description="Precio del produto sin descuento aplicado"
                       />
                       <ObjectInfoCard
                         title="bestPrice"
                         type="number"
-                        description="Precio del artículo con descuento aplicado"
+                        description="Precio del produto con descuento aplicado"
                       />
                       <ObjectInfoCard
                         title="instructions"
@@ -405,22 +416,22 @@ curl -v -X GET
                       <ObjectInfoCard
                         title="name"
                         type="string"
-                        description="Nombre del artículo"
+                        description="Nombre del produto"
                       />
                       <ObjectInfoCard
                         title="sku"
                         type="string"
-                        description="SKU del artículo"
+                        description="SKU del produto"
                       />
                       <ObjectInfoCard
                         title="barcode"
                         type="string"
-                        description="Código de barra del artículo"
+                        description="Código de barra del produto"
                       />
                       <ObjectInfoCard
                         title="withDiscount"
                         type="boolean"
-                        description="Indica si el artículo tiene descuento propio"
+                        description="Indica si el produto tiene descuento propio"
                       />
                       <ObjectInfoCard
                         title="discount"
@@ -452,7 +463,7 @@ curl -v -X GET
                                       "BRAND": Descuento sobre marca
                                       "SKU": Descuento sobre SKUs
                                       "ALL": Descuento sobre todo el restaurant
-                                      "COLLECTIONS": Descuento sobre colección                       
+                                      "COLLECTIONS": Descuento sobre colección
                               `}
                             />
                             <ObjectInfoCard
@@ -474,19 +485,16 @@ curl -v -X GET
                               title="amountLimit"
                               type="number"
                               description="Monto límite"
-                              required={false}
                             />
                             <ObjectInfoCard
                               title="useWithShipping"
                               type="boolean"
                               description="Aplicar descuento sobre el precio del envío"
-                              required={false}
                             />
                             <ObjectInfoCard
                               title="useDiscountAmount"
                               type="boolean"
                               description="Al activar el monto fijo, el cupón dejara de descontar un porcentaje del total del pedido y pasará a descontar directamente el monto indicado."
-                              required={false}
                             />
                           </>
                         }
@@ -508,18 +516,16 @@ curl -v -X GET
             title="success"
             type="boolean"
             description="Indica si la solicitud fue sastifactoria"
-            required={false}
           />
           <ObjectInfoCard
             title="message"
             type="string"
             description="Descripción del resultado obtenido"
-            required={false}
           />
           <ObjectInfoCard
             title="data"
             type="object"
-            description="Contiene la información de la orden"
+            description="Objecto con el error"
             required={false}
           />
         </>
@@ -533,17 +539,13 @@ curl -v -X GET
             title="message"
             type="string"
             description="Descripción del resultado obtenido"
-            required={false}
           />
         </>
       ),
-    },
-  ]}
+    }
+
+]}
 />
-
-#### Error
-
-**Condición** : Sí el token de acceso es inválido o ya ha realizado más de una vez la solicitud dentro del tiempo límite.
 
 ## Obtener ordenes por fecha
 
@@ -588,7 +590,7 @@ curl -v -X GET
   <h6
     style={{ fontSize: 14, height: 30, marginLeft: 5, textDecoration: "none" }}
   >
-    https://api.lumarketo.cl/public/order
+    https://api.lumarketo.cl/public/order/all
   </h6>
 </div>
 Debe incluir un token de acceso en el encabezado de **'Authorization'** en todas
@@ -596,8 +598,490 @@ las solicitudes.
 
 **Parámetros de consulta**
 
-<ObjectInfoCard
-  title="orderNumber"
-  type="number"
-  description="N° de orden del restaurant"
+<ObjectInfoCard title="startDate" type="string" description="Fecha inicial" />
+
+<ObjectInfoCard title="endDate" type="string" description="Fecha final" />
+
+**Ejemplo.**
+
+```ts showLineNumbers /appDir: true/
+curl -v -X GET
+    --url 'https://api.lumarketo.cl/public/order/all?startDate=2023/10/01&endDate=2023/10/08'
+    --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
+```
+
+### Respuestas
+
+<ResponseAccordionComponent
+  items={[
+    {
+      title: "200 Success",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="success"
+            type="boolean"
+            description="Indica si la solicitud fue sastifactoria"
+          />
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+          />
+          <ObjectInfoCard
+            title="data"
+            type="array"
+            description="Arreglo que contiene la información de las ordenes encontradas segun el intervalo de fechas ingresadas"
+            required={false}
+            content={
+              <>
+                <ObjectInfoCard
+                  title="orderNumber"
+                  type="number"
+                  description="N° de orden del restaurant"
+                />
+                <ObjectInfoCard
+                  title="coupons"
+                  type="array"
+                  description="Cupones utilizados en la orden"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="title"
+                        type="string"
+                        description="Nombre del cupón"
+                      />
+                      <ObjectInfoCard
+                        title="value"
+                        type="number"
+                        description="Valor del cupón"
+                      />
+                      <ObjectInfoCard
+                        title="coupon"
+                        type="string"
+                        description="Código del cupón"
+                      />
+                      <ObjectInfoCard
+                        title="cumulative"
+                        type="boolean"
+                        description="Al activar el cupón acumulable, le das al usuario la posibilidad de acumular este cupón con otros descuentos y cupones dentro de tu tienda web."
+                      />
+                      <ObjectInfoCard
+                        title="useAmountLimit"
+                        type="boolean"
+                        description="Al activar el monto límite, el cupón solo será valido si el usuario compra un monto determinado dentro de tu tienda web."
+                      />
+                      <ObjectInfoCard
+                        title="amountLimit"
+                        type="number"
+                        description="Monto límite"
+                      />
+                      <ObjectInfoCard
+                        title="useWithShipping"
+                        type="boolean"
+                        description="Aplicar descuento sobre el precio del envío"
+                      />
+                      <ObjectInfoCard
+                        title="useDiscountAmount"
+                        type="boolean"
+                        description="Al activar el monto fijo, el cupón dejara de descontar un porcentaje del total del pedido y pasará a descontar directamente el monto indicado."
+                      />
+                    </>
+                  }
+                />
+                <ObjectInfoCard
+                  title="createdDate"
+                  type="string"
+                  description="Fecha de creación de la orden"
+                />
+                <ObjectInfoCard
+                  title="user"
+                  type="object"
+                  description="Objeto con información del cliente"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="rut"
+                        type="string"
+                        description="RUT del cliente"
+                      />
+                      <ObjectInfoCard
+                        title="fullName"
+                        type="string"
+                        description="Nombre completo del cliente"
+                      />
+                      <ObjectInfoCard
+                        title="tlf"
+                        type="string"
+                        description="Número de teléfono del cliente"
+                      />
+                      <ObjectInfoCard
+                        title="email"
+                        type="string"
+                        description="Correo electrónico del cliente"
+                      />
+                    </>
+                  }
+                />
+                <ObjectInfoCard
+                  title="address"
+                  type="object"
+                  description="Objeto con información de la dirección de despacho"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="lat"
+                        type="number"
+                        description="Latitud"
+                      />
+                      <ObjectInfoCard
+                        title="lng"
+                        type="string"
+                        description="Longitud"
+                      />
+                      <ObjectInfoCard
+                        title="address"
+                        type="string"
+                        description="Dirección del envío"
+                      />
+                      <ObjectInfoCard
+                        title="streetNumber"
+                        type="string"
+                        description="Número de calle"
+                      />
+                      <ObjectInfoCard
+                        title="country"
+                        type="string"
+                        description="País"
+                      />
+                      <ObjectInfoCard
+                        title="state"
+                        type="string"
+                        description="Región"
+                      />
+                      <ObjectInfoCard
+                        title="city"
+                        type="string"
+                        description="Comuna"
+                      />
+                      <ObjectInfoCard
+                        title="zipCode"
+                        type="string"
+                        description="Código postal"
+                      />
+                      <ObjectInfoCard
+                        title="details"
+                        type="string"
+                        description="Detalles de la dirección"
+                      />
+                    </>
+                  }
+                  required={false}
+                />
+                <ObjectInfoCard
+                  title="shipping"
+                  type="object"
+                  description="Objeto con información del envío, si este objeto no es devuelto, la orden sera retira en la sucursal"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="price"
+                        type="number"
+                        description="Precio del envío"
+                      />
+                      <ObjectInfoCard
+                        title="method"
+                        type="string"
+                        description="Método de envío utilizado"
+                      />
+                    </>
+                  }
+                  required={false}
+                />
+                <ObjectInfoCard
+                  title="payment"
+                  type="object"
+                  description="Objeto con información del pago"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="total"
+                        type="number"
+                        description="Total pagado por el cliente"
+                      />
+                      <ObjectInfoCard
+                        title="shippingCost"
+                        type="number"
+                        description="Costo del envío"
+                      />
+                      <ObjectInfoCard
+                        title="method"
+                        type="string"
+                        description="Método de pago utilizado"
+                      />
+                    </>
+                  }
+                />
+                <ObjectInfoCard
+                  title="subsidiary"
+                  type="object"
+                  description="Objeto con información de la sucursal"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="id"
+                        type="string"
+                        description="ID de la sucursal"
+                      />
+
+                      <ObjectInfoCard
+                        title="name"
+                        type="string"
+                        description="Nombre de la sucursal"
+                      />
+                      <ObjectInfoCard
+                        title="manager"
+                        type="string"
+                        description="Manager de la sucursal"
+                      />
+                      <ObjectInfoCard
+                        title="tlf"
+                        type="string"
+                        description="Teléfono de la sucursal"
+                      />
+
+                      <ObjectInfoCard
+                        title="address"
+                        type="object"
+                        description="Objeto con información de la dirección de despacho"
+                        content={
+                          <>
+                            <ObjectInfoCard
+                              title="lat"
+                              type="number"
+                              description="Latitud"
+                            />
+                            <ObjectInfoCard
+                              title="lng"
+                              type="string"
+                              description="Longitud"
+                            />
+                            <ObjectInfoCard
+                              title="address"
+                              type="string"
+                              description="Dirección del envío"
+                            />
+                            <ObjectInfoCard
+                              title="streetNumber"
+                              type="string"
+                              description="Número de calle"
+                            />
+                            <ObjectInfoCard
+                              title="country"
+                              type="string"
+                              description="País"
+                            />
+                            <ObjectInfoCard
+                              title="state"
+                              type="string"
+                              description="Región"
+                            />
+                            <ObjectInfoCard
+                              title="city"
+                              type="string"
+                              description="Comuna"
+                            />
+                            <ObjectInfoCard
+                              title="zipCode"
+                              type="string"
+                              description="Código postal"
+                            />
+                            <ObjectInfoCard
+                              title="details"
+                              type="string"
+                              description="Detalles de la dirección"
+                            />
+                          </>
+                        }
+                      />
+                    </>
+                  }
+                />
+                <ObjectInfoCard
+                  title="items"
+                  type="array"
+                  description="Arreglo con los produtos de la orden"
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="quantity"
+                        type="number"
+                        description="Cantidad del produto"
+                      />
+                      <ObjectInfoCard
+                        title="price"
+                        type="number"
+                        description="Precio del produto sin descuento aplicado"
+                      />
+                      <ObjectInfoCard
+                        title="bestPrice"
+                        type="number"
+                        description="Precio del produto con descuento aplicado"
+                      />
+                      <ObjectInfoCard
+                        title="instructions"
+                        type="string"
+                        description="Instrucciones para la preparación"
+                      />
+                      <ObjectInfoCard
+                        title="additionals"
+                        type="array"
+                        description="Arreglo con los adicionales"
+                        content={
+                          <>
+                            <ObjectInfoCard
+                              title="name"
+                              type="string"
+                              description="Nombre del adicional"
+                            />
+                            <ObjectInfoCard
+                              title="price"
+                              type="number"
+                              description="Precio del adicional"
+                            />
+                          </>
+                        }
+                      />
+                      <ObjectInfoCard
+                        title="name"
+                        type="string"
+                        description="Nombre del produto"
+                      />
+                      <ObjectInfoCard
+                        title="sku"
+                        type="string"
+                        description="SKU del produto"
+                      />
+                      <ObjectInfoCard
+                        title="barcode"
+                        type="string"
+                        description="Código de barra del produto"
+                      />
+                      <ObjectInfoCard
+                        title="withDiscount"
+                        type="boolean"
+                        description="Indica si el produto tiene descuento propio"
+                      />
+                      <ObjectInfoCard
+                        title="discount"
+                        type="boolean"
+                        description="Valor del descuento en  %"
+                      />
+                      <ObjectInfoCard
+                        title="promotion"
+                        type="array"
+                        description="Cupones utilizados en la orden"
+                        content={
+                          <>
+                            <ObjectInfoCard
+                              title="title"
+                              type="string"
+                              description="Nombre del cupón"
+                            />
+                            <ObjectInfoCard
+                              title="value"
+                              type="number"
+                              description="Valor del cupón"
+                            />
+                            <ObjectInfoCard
+                              title="type"
+                              type="string"
+                              description={`
+                                    Indica el tipo de descuento.
+                                      "CATEGORY": Descuento sobre categoría
+                                      "BRAND": Descuento sobre marca
+                                      "SKU": Descuento sobre SKUs
+                                      "ALL": Descuento sobre todo el restaurant
+                                      "COLLECTIONS": Descuento sobre colección
+                              `}
+                            />
+                            <ObjectInfoCard
+                              title="coupon"
+                              type="string"
+                              description="Código del cupón"
+                            />
+                            <ObjectInfoCard
+                              title="cumulative"
+                              type="boolean"
+                              description="Al activar el cupón acumulable, le das al usuario la posibilidad de acumular este cupón con otros descuentos y cupones dentro de tu tienda web."
+                            />
+                            <ObjectInfoCard
+                              title="useAmountLimit"
+                              type="boolean"
+                              description="Al activar el monto límite, el cupón solo será valido si el usuario compra un monto determinado dentro de tu tienda web."
+                            />
+                            <ObjectInfoCard
+                              title="amountLimit"
+                              type="number"
+                              description="Monto límite"
+                            />
+                            <ObjectInfoCard
+                              title="useWithShipping"
+                              type="boolean"
+                              description="Aplicar descuento sobre el precio del envío"
+                            />
+                            <ObjectInfoCard
+                              title="useDiscountAmount"
+                              type="boolean"
+                              description="Al activar el monto fijo, el cupón dejara de descontar un porcentaje del total del pedido y pasará a descontar directamente el monto indicado."
+                            />
+                          </>
+                        }
+                      />
+                    </>
+                  }
+                />
+              </>
+            }
+          />
+        </>
+      )
+    },
+    {
+      title: "400 Bad Request",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="success"
+            type="boolean"
+            description="Indica si la solicitud fue sastifactoria"
+          />
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+          />
+          <ObjectInfoCard
+            title="data"
+            type="object"
+            description="Objecto con el error"
+            required={false}
+          />
+        </>
+      )
+    },
+    {
+      title: "403 Forbidden",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+          />
+        </>
+      )
+    }
+
+]}
 />

@@ -1,0 +1,166 @@
+---
+title: Productos
+description:
+---
+
+import { ResponseAccordionComponent } from "@/components/css/accordion"
+import { JsonViewer, ObjectInfoCard } from "@/components/css/card"
+
+## Modificar producto
+
+<div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
+  <div
+    style={{
+      display: "inline-flex",
+      flexDirection: "row",
+      backgroundColor: "#674ead",
+      border: "none",
+      cursor: "default",
+      height: "20px",
+      outline: "none",
+      padding: 0,
+      fontSize: "10px",
+      fontFamily: "Open Sans, sans-serif",
+      whiteSpace: "nowrap",
+      alignItems: "center",
+      borderRadius: "16px",
+      verticalAlign: "middle",
+      textDecoration: "none",
+      justifyContent: "center",
+      width: "auto",
+    }}
+  >
+    <div
+      style={{
+        cursor: "inherit",
+        display: "flex",
+        alignItems: "center",
+        userSelect: "none",
+        whiteSpace: "nowrap",
+        paddingLeft: "12px",
+        paddingRight: "12px",
+        fontWeight: 600,
+        color: "#fff",
+      }}
+    >
+      PUT
+    </div>
+  </div>
+  <h6
+    style={{ fontSize: 14, height: 30, marginLeft: 5, textDecoration: "none" }}
+  >
+    https://api.lumarketo.cl/public/product
+  </h6>
+</div>
+Debe incluir un token de acceso en el encabezado de **'Authorization'** en todas
+las solicitudes.
+
+**Cuerpo de la consulta**
+
+<ObjectInfoCard title="sku" type="number" description="SKU del produto" />
+<ObjectInfoCard
+  title="price"
+  type="number"
+  description="Precio del produto"
+  required={false}
+/>
+<ObjectInfoCard
+  title="stocks"
+  type="array"
+  description="Arreglo con la información de stocks por sucursal"
+  required={false}
+  content={
+    <>
+      <ObjectInfoCard
+        title="subsidiaryId"
+        type="number"
+        description="ID de la sucursal"
+      />
+      <ObjectInfoCard
+        title="qty"
+        type="number"
+        description="Cantidad del produto"
+      />
+    </>
+  }
+/>
+
+**Ejemplo.**
+
+```ts showLineNumbers /appDir: true/
+curl -v -X PUT
+    --url 'https://api.lumarketo.cl/public/product'
+    --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
+    --data '{ "sku": 50, "price": 2560 "stocks": [{ "subsidiaryId": "XXXXXXXXXXXXXXXXXXX", "qty": 6000 }]}'
+```
+
+### Respuestas
+
+<ResponseAccordionComponent
+  items={[
+    {
+      title: "200 Success",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="success"
+            type="boolean"
+            description="Indica si la solicitud fue sastifactoria"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="data"
+            type="object"
+            description="Por defecto {}"
+            required={false}
+          />
+        </>
+      ),
+    },
+    {
+      title: "400 Bad Request",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="success"
+            type="boolean"
+            description="Indica si la solicitud fue sastifactoria"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="data"
+            type="object"
+            description="Objecto con el error"
+            required={false}
+          />
+        </>
+      ),
+    },
+    {
+      title: "403 Forbidden",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+            required={false}
+          />
+        </>
+      ),
+    },
+
+]}
+/>

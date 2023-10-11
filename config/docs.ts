@@ -28,6 +28,14 @@ export const docsConfig: DocsConfig = {
           title: "Ordenes",
           href: "/docs/order",
         },
+        {
+          title: "Sucursales",
+          href: "/docs/subsidiary",
+        },
+        {
+          title: "Productos",
+          href: "/docs/product",
+        },
       ],
     },
   ],
