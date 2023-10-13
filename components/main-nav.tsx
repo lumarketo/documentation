@@ -3,9 +3,10 @@
 import * as React from "react"
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
+import { useTheme } from "next-themes"
 
 import { MainNavItem } from "types"
-import { siteConfig } from "@/config/site"
+// import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { MobileNav } from "@/components/mobile-nav"
@@ -18,14 +19,30 @@ interface MainNavProps {
 export function MainNav({ items, children }: MainNavProps) {
   const segment = useSelectedLayoutSegment()
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false)
+  const { theme } = useTheme()
 
   return (
     <div className="flex gap-6 md:gap-10">
       <Link href="/" className="hidden items-center space-x-2 md:flex">
-        <Icons.logo />
-        <span className="hidden font-bold sm:inline-block">
+        {theme === "light" ? (
+          <img
+            src="https://s3.amazonaws.com/haya.lumarketo.cl/logoverdenubefood.webp"
+            alt="logo"
+            height={25}
+            width={125}
+          />
+        ) : (
+          <img
+            src="https://s3.amazonaws.com/haya.lumarketo.cl/logonubefoodblanco.svg"
+            alt="logo"
+            height={25}
+            width={125}
+          />
+        )}
+
+        {/* <span className="hidden font-bold sm:inline-block">
           {siteConfig.name}
-        </span>
+        </span> */}
       </Link>
       {items?.length ? (
         <nav className="hidden gap-6 md:flex">
