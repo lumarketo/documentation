@@ -189,3 +189,231 @@ curl -v -X PUT
 
 ]}
 />
+
+## Modificar productos en lote
+
+<>
+  <div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
+    <div
+      style={{
+        display: "inline-flex",
+        flexDirection: "row",
+        backgroundColor: "#674ead",
+        border: "none",
+        cursor: "default",
+        height: "20px",
+        outline: "none",
+        padding: 0,
+        fontSize: "10px",
+        fontFamily: "Open Sans, sans-serif",
+        whiteSpace: "nowrap",
+        alignItems: "center",
+        borderRadius: "16px",
+        verticalAlign: "middle",
+        textDecoration: "none",
+        justifyContent: "center",
+        width: "auto",
+      }}
+    >
+      <div
+        style={{
+          cursor: "inherit",
+          display: "flex",
+          alignItems: "center",
+          userSelect: "none",
+          whiteSpace: "nowrap",
+          paddingLeft: "12px",
+          paddingRight: "12px",
+          fontWeight: 600,
+          color: "#fff",
+        }}
+      >
+        PUT
+      </div>
+    </div>
+    <h6
+      style={{
+        fontSize: 14,
+        height: 30,
+        marginLeft: 5,
+        textDecoration: "none",
+      }}
+    >
+      https://api.lumarketo.cl/public/product/batch
+    </h6>
+  </div>
+</>
+Actualiza varios productos en una sola solicitud. Debe incluir un token de acceso
+en el encabezado de **'Authorization'** en todas las solicitudes.
+
+Los items inválidos o cuyo SKU no exista no detienen la operación: se procesan los
+válidos y los descartados se informan en `data.errors`.
+
+**Ratelimit**
+<>
+  <p>Cada 1 segundo</p>
+</>
+
+
+**Cuerpo de la consulta**
+
+<ObjectInfoCard
+  title="products"
+  type="array"
+  description="Arreglo de productos a actualizar (mínimo 1)"
+  content={
+    <>
+      <ObjectInfoCard title="sku" type="number" description="SKU del producto" />
+      <ObjectInfoCard
+        title="price"
+        type="number"
+        description="Precio del producto"
+        required={false}
+      />
+      <ObjectInfoCard
+        title="stocks"
+        type="array"
+        description="Arreglo con la información de stocks por sucursal"
+        required={false}
+        content={
+          <>
+            <ObjectInfoCard
+              title="subsidiaryId"
+              type="number"
+              description="ID de la sucursal"
+            />
+            <ObjectInfoCard
+              title="qty"
+              type="number"
+              description="Cantidad del producto"
+            />
+          </>
+        }
+      />
+    </>
+  }
+/>
+
+<>
+  <p style={{ marginTop: 12 }}>
+    Cada item debe incluir <strong>price</strong> o <strong>stocks</strong> (al
+    menos uno).
+  </p>
+</>
+
+**Ejemplo.**
+
+```ts showLineNumbers /appDir: true/
+curl -v -X PUT
+    --url 'https://api.lumarketo.cl/public/product/batch'
+    --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
+    --data '{ "products": [{ "sku": 50, "price": 2560, "stocks": [{ "subsidiaryId": "XXXXXXXXXXXXXXXXXXX", "qty": 6000 }] }, { "sku": 51, "price": 1990 }] }'
+```
+
+### Respuestas
+
+<ResponseAccordionComponent
+  items={[
+    {
+      title: "200 Success",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="success"
+            type="boolean"
+            description="Indica si la solicitud fue sastifactoria"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="data"
+            type="object"
+            description="Resumen de la operación"
+            required={false}
+            content={
+              <>
+                <ObjectInfoCard
+                  title="updated"
+                  type="number"
+                  description="Cantidad de SKU actualizados"
+                  required={false}
+                />
+                <ObjectInfoCard
+                  title="total"
+                  type="number"
+                  description="Cantidad de items recibidos"
+                  required={false}
+                />
+                <ObjectInfoCard
+                  title="errors"
+                  type="array"
+                  description="Items que no se pudieron actualizar"
+                  required={false}
+                  content={
+                    <>
+                      <ObjectInfoCard
+                        title="sku"
+                        type="number"
+                        description="SKU del item descartado"
+                        required={false}
+                      />
+                      <ObjectInfoCard
+                        title="message"
+                        type="string"
+                        description="Motivo del descarte"
+                        required={false}
+                      />
+                    </>
+                  }
+                />
+              </>
+            }
+          />
+        </>
+      ),
+    },
+    {
+      title: "400 Bad Request",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="success"
+            type="boolean"
+            description="Indica si la solicitud fue sastifactoria"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+            required={false}
+          />
+          <ObjectInfoCard
+            title="data"
+            type="object"
+            description="Objecto con el error"
+            required={false}
+          />
+        </>
+      ),
+    },
+    {
+      title: "401 Unauthorized",
+      content: (
+        <>
+          <ObjectInfoCard
+            title="message"
+            type="string"
+            description="Descripción del resultado obtenido"
+          />
+        </>
+      )
+    }
+
+]}
+/>
