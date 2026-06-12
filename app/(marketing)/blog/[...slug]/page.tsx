@@ -14,13 +14,14 @@ import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 
 interface PostPageProps {
-  params: {
+  params: Promise<{
     slug: string[]
-  }
+  }>
 }
 
-async function getPostFromParams(params) {
-  const slug = params?.slug?.join("/")
+async function getPostFromParams(params: PostPageProps["params"]) {
+  const { slug: slugParts } = await params
+  const slug = slugParts?.join("/")
   const post = allPosts.find((post) => post.slugAsParams === slug)
 
   if (!post) {
@@ -75,9 +76,7 @@ export async function generateMetadata({
   }
 }
 
-export async function generateStaticParams(): Promise<
-  PostPageProps["params"][]
-> {
+export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
   return allPosts.map((post) => ({
     slug: post.slugAsParams.split("/"),
   }))

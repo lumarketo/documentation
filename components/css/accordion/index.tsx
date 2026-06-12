@@ -9,14 +9,14 @@ export function ResponseAccordionComponent({
   items: [
     {
       title: string,
-      content: JSX.Element
+      content: React.ReactNode
     }
   ]
 }) {
   return (
     <div className="accordionContainer">
       {items.map((item: any, i: number) => (
-        <ResponseAccordionItem item={item} key={`${i}-acc-${Date.now()}`} />
+        <ResponseAccordionItem item={item} key={`acc-${i}`} />
       ))}
     </div>
   )
@@ -27,7 +27,7 @@ const ResponseAccordionItem = ({
 }: {
   item: {
     title: string
-    content: JSX.Element
+    content: React.ReactNode
   }
 }) => {
   const [show, setShow] = React.useState(false)
@@ -37,9 +37,24 @@ const ResponseAccordionItem = ({
       <button
         className="accordion font-medium"
         style={{ fontWeight: 600 }}
+        aria-expanded={show}
         onClick={() => setShow((p) => !p)}
       >
-        {item.title}
+        <span>{item.title}</span>
+        <svg
+          className="accordion-icon"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
       </button>
       <div className="panel" style={{ display: show ? "block" : "none" }}>
         {item.content}

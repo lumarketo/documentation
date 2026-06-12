@@ -1,7 +1,7 @@
 "use client"
 import * as React from "react"
 import Image from "next/image"
-import { useMDXComponent } from "next-contentlayer/hooks"
+import { useMDXComponent } from "next-contentlayer2/hooks"
 
 import { cn } from "@/lib/utils"
 import { Callout } from "@/components/callout"

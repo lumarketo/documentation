@@ -82,44 +82,55 @@
 
 .accordionContainer {
   margin-top: 10px;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .accordion {
-  background-color: rgb(243 243 243 / 5%);
+  background-color: hsl(var(--muted) / 0.4);
+  color: hsl(var(--foreground));
   cursor: pointer;
-  padding: 18px;
+  padding: 12px 16px;
   width: 100%;
   text-align: left;
-  border: 1px solid #d3d3d3;
+  border: none;
+  border-top: 1px solid hsl(var(--border));
   outline: none;
-  transition: 0.4s;
-  /* border-radius: 5px 5px 0px 0px; */
-  border-bottom: none;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
 }
 
 .accordionContainer > .accordion:first-of-type {
-  border-radius: 10px 10px 0px 0px;
+  border-top: none;
 }
 
-.accordionContainer > .panel:last-of-type {
-  border-radius: 0px 0px 10px 10px;
-}
-
-.accordionContainer > .accordion {
-  border: 1px solid #d3d3d3;
-}
-
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+/* Add a background color to the button when hovered or expanded */
 .active,
-.accordion:hover {
-  background-color: rgb(243 243 243 / 10%);
+.accordion:hover,
+.accordion[aria-expanded="true"] {
+  background-color: hsl(var(--accent));
+}
+
+.accordion-icon {
+  flex-shrink: 0;
+  color: hsl(var(--muted-foreground));
+  transition: transform 0.2s ease;
+}
+
+.accordion[aria-expanded="true"] .accordion-icon {
+  transform: rotate(180deg);
 }
 
 /* Style the accordion panel. Note: hidden by default */
 .panel {
-  padding: 18px;
-  background-color: rgb(243 243 243 / 15%);
+  padding: 16px;
+  background-color: hsl(var(--background));
   display: none;
   overflow: hidden;
-  border: 0.1px solid #d3d3d3;
+  border-top: 1px solid hsl(var(--border));
 }

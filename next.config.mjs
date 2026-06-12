@@ -1,4 +1,6 @@
-import { withContentlayer } from "next-contentlayer"
+import { fileURLToPath } from "node:url"
+
+import { withContentlayer } from "next-contentlayer2"
 
 import "./env.mjs"
 
@@ -6,11 +8,19 @@ import "./env.mjs"
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["avatars.githubusercontent.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+      },
+    ],
   },
-  experimental: {
-    appDir: true,
-    serverComponentsExternalPackages: ["@prisma/client"],
+  serverExternalPackages: ["@prisma/client"],
+  // Next 16 builds with Turbopack by default. `withContentlayer` injects a
+  // webpack config, so we declare a turbopack config (and pin the workspace
+  // root to this app) to avoid the webpack/turbopack ambiguity error.
+  turbopack: {
+    root: fileURLToPath(new URL(".", import.meta.url)),
   },
 }
 
