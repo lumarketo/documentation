@@ -1,20 +1,57 @@
 ---
 title: Autenticación
-description: 
+description:
 ---
 
-## 1. Obtenga su token de acceso
+La API pública usa **JWT** con esquema de **access token + refresh token**.
 
-Solicita a soporte su token de acceso
+## 1. Obtenga sus tokens
 
-## 2. Incluir token de acceso
+Solicite a soporte (o genere desde el panel) el **par de tokens** de su empresa:
 
-Debe incluir un token de acceso en el encabezado de **'Authorization'** en todas las solicitudes.
+- **access token** — JWT de corta duración (**1 hora**). Va en el header `Authorization` de cada request.
+- **refresh token** — JWT de larga duración (**30 días**). Sirve para obtener un nuevo access token cuando el actual expira. Guárdelo de forma segura.
+
+## 2. Incluir el access token
+
+Incluya el access token en el header **`Authorization: Bearer <access token>`** en todas las solicitudes.
 
 ###### Ejemplo.
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X GET
-    --url 'https://api.lumarketo.cl/public/order/all'
-    --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
+    --url 'https://api.lumarketo.cl/public/order/all?startDate=2026-06-01&endDate=2026-06-30'
+    --header 'Authorization: Bearer <access_token>'
 ```
+
+Si el access token expiró o es inválido, la API responde **401**.
+
+## 3. Renovar el access token
+
+Cuando el access token expira (1h), obtenga uno nuevo con su **refresh token**:
+
+```ts showLineNumbers /appDir: true/
+curl -v -X POST
+    --url 'https://api.lumarketo.cl/public/token/refresh'
+    --header 'Content-Type: application/json'
+    --data '{ "refreshToken": "<refresh_token>" }'
+```
+
+Respuesta:
+
+```json
+{
+  "success": true,
+  "data": {
+    "token": "<nuevo access token>",
+    "refreshToken": "<nuevo refresh token>",
+    "expiresIn": "1h"
+  }
+}
+```
+
+> El refresh token se **rota** en cada uso: el refresh anterior deja de servir, guarde siempre el nuevo. Si el refresh es inválido, expiró o fue revocado → **401**.
+
+## Rate limit
+
+Cada endpoint tiene un límite de frecuencia por empresa. Si lo supera, la API responde **429 (Too Many Requests)** — reintente luego del intervalo.

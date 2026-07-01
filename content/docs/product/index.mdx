@@ -414,3 +414,66 @@ curl -v -X PUT
 
 ]}
 />
+
+> **Nota:** en `stocks`, cada item puede enviar `subsidiaryId` (ID interno) **o** `externalId` (extId de la sucursal en Fudo/Toteat). Si se envía `externalId`, se resuelve automáticamente a la sucursal. Aplica en "Modificar producto" y "Modificar productos en lote".
+
+## Productos por sucursal
+
+<>
+  <div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
+    <div style={{ display: "inline-flex", backgroundColor: "green", height: "20px", fontSize: "10px", alignItems: "center", borderRadius: "16px", justifyContent: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", paddingLeft: "12px", paddingRight: "12px", fontWeight: 600, color: "#fff" }}>GET</div>
+    </div>
+    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.lumarketo.cl/public/product/list</h6>
+  </div>
+</>
+
+Lista los productos disponibles en una sucursal. Requiere Bearer token.
+
+**Parámetros de consulta (query) — uno de los dos**
+
+<ObjectInfoCard title="subsidiaryId" type="string" description="ID interno de la sucursal" required={false} />
+<ObjectInfoCard title="externalId" type="string" description="ID externo de la sucursal (extId); se resuelve al ID interno" required={false} />
+
+**Ejemplo.**
+
+```ts showLineNumbers /appDir: true/
+curl -v -X GET
+    --url 'https://api.lumarketo.cl/public/product/list?subsidiaryId=6403c1fbc961b1bdaaf7fd18'
+    --header 'Authorization: Bearer <access_token>'
+```
+
+`data` es un arreglo de productos. Cada producto: `{ id, name, category, show, children: [{ sku, barcode, price, withDiscount, discount, show, stocks: [{ subsidiaryId, qty, show }], integrations: [{ subsidiaryId, productIdFudo, productCodeToteat, extId }] }] }`.
+
+## Producto por ID externo (Fudo / Toteat)
+
+<>
+  <div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
+    <div style={{ display: "inline-flex", backgroundColor: "green", height: "20px", fontSize: "10px", alignItems: "center", borderRadius: "16px", justifyContent: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", paddingLeft: "12px", paddingRight: "12px", fontWeight: 600, color: "#fff" }}>GET</div>
+    </div>
+    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.lumarketo.cl/public/product/external</h6>
+  </div>
+</>
+
+Obtiene un producto por su ID externo de integración, guardado en `children.integrations`. Requiere Bearer token.
+
+**Parámetros de consulta (query)**
+
+<ObjectInfoCard title="externalId" type="string" description="ID del producto en la plataforma" />
+<ObjectInfoCard
+  title="platform"
+  type="string"
+  description="fudo | toteat. fudo busca en productIdFudo (número), toteat en productCodeToteat (string). Si se omite, busca en ambos y en extId."
+  required={false}
+/>
+
+**Ejemplo.**
+
+```ts showLineNumbers /appDir: true/
+curl -v -X GET
+    --url 'https://api.lumarketo.cl/public/product/external?externalId=931&platform=fudo'
+    --header 'Authorization: Bearer <access_token>'
+```
+
+`data` es un producto (mismo formato que "Productos por sucursal"), o `null` si no existe.
