@@ -71,7 +71,20 @@ las solicitudes.
 
 **Cuerpo de la consulta**
 
-<ObjectInfoCard title="sku" type="number" description="SKU del producto" />
+Identificá el producto con `sku` **o** `externalId` (uno de los dos), y enviá al menos uno de `price` o `stocks`.
+
+<ObjectInfoCard
+  title="sku"
+  type="number"
+  description="SKU del producto. Requerido salvo que envíes externalId."
+  required={false}
+/>
+<ObjectInfoCard
+  title="externalId"
+  type="string"
+  description="ID de integración (Fudo/Toteat) del producto, en children.integrations. Alternativa a sku — la plataforma se detecta automáticamente (productIdFudo, productCodeToteat o extId)."
+  required={false}
+/>
 <ObjectInfoCard
   title="price"
   type="number"
@@ -87,8 +100,15 @@ las solicitudes.
     <>
       <ObjectInfoCard
         title="subsidiaryId"
-        type="number"
-        description="ID de la sucursal"
+        type="string"
+        description="ID interno de la sucursal (o usá externalId)"
+        required={false}
+      />
+      <ObjectInfoCard
+        title="externalId"
+        type="string"
+        description="extId de la sucursal (Fudo/Toteat); se resuelve al ID interno"
+        required={false}
       />
       <ObjectInfoCard
         title="qty"
@@ -104,8 +124,17 @@ las solicitudes.
 ```ts showLineNumbers /appDir: true/
 curl -v -X PUT
     --url 'https://api.lumarketo.cl/public/product'
-    --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
-    --data '{ "sku": 50, "price": 2560 "stocks": [{ "subsidiaryId": "XXXXXXXXXXXXXXXXXXX", "qty": 6000 }]}'
+    --header 'Authorization: Bearer <access_token>'
+    --data '{ "sku": 50, "price": 2560, "stocks": [{ "subsidiaryId": "XXXXXXXXXXXXXXXXXXX", "qty": 6000 }] }'
+```
+
+Identificando el producto por `externalId` de integración (sin `sku`):
+
+```ts showLineNumbers /appDir: true/
+curl -v -X PUT
+    --url 'https://api.lumarketo.cl/public/product'
+    --header 'Authorization: Bearer <access_token>'
+    --data '{ "externalId": "777", "price": 2560 }'
 ```
 
 ### Respuestas
@@ -265,7 +294,18 @@ válidos y los descartados se informan en `data.errors`.
   description="Arreglo de productos a actualizar (mínimo 1)"
   content={
     <>
-      <ObjectInfoCard title="sku" type="number" description="SKU del producto" />
+      <ObjectInfoCard
+        title="sku"
+        type="number"
+        description="SKU del producto. Requerido salvo que envíes externalId."
+        required={false}
+      />
+      <ObjectInfoCard
+        title="externalId"
+        type="string"
+        description="ID de integración (Fudo/Toteat) del producto, en children.integrations. Alternativa a sku — la plataforma se detecta automáticamente."
+        required={false}
+      />
       <ObjectInfoCard
         title="price"
         type="number"
@@ -281,8 +321,15 @@ válidos y los descartados se informan en `data.errors`.
           <>
             <ObjectInfoCard
               title="subsidiaryId"
-              type="number"
-              description="ID de la sucursal"
+              type="string"
+              description="ID interno de la sucursal (o usá externalId)"
+              required={false}
+            />
+            <ObjectInfoCard
+              title="externalId"
+              type="string"
+              description="extId de la sucursal (Fudo/Toteat); se resuelve al ID interno"
+              required={false}
             />
             <ObjectInfoCard
               title="qty"
@@ -296,15 +343,15 @@ válidos y los descartados se informan en `data.errors`.
   }
 />
 
-Cada item debe incluir **price** o **stocks** (al menos uno).
+Cada item se identifica con **sku** o **externalId** (uno de los dos) y debe incluir **price** o **stocks** (al menos uno). Los items inválidos o cuyo producto no exista no abortan el batch: se reportan en `data.errors` con `index`, `sku`, `externalId` y el mensaje.
 
 **Ejemplo.**
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X PUT
     --url 'https://api.lumarketo.cl/public/product/batch'
-    --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
-    --data '{ "products": [{ "sku": 50, "price": 2560, "stocks": [{ "subsidiaryId": "XXXXXXXXXXXXXXXXXXX", "qty": 6000 }] }, { "sku": 51, "price": 1990 }] }'
+    --header 'Authorization: Bearer <access_token>'
+    --data '{ "products": [{ "sku": 50, "price": 2560, "stocks": [{ "subsidiaryId": "XXXXXXXXXXXXXXXXXXX", "qty": 6000 }] }, { "externalId": "777", "price": 1990 }] }'
 ```
 
 ### Respuestas
