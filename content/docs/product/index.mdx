@@ -430,20 +430,24 @@ curl -v -X PUT
 
 Lista los productos disponibles en una sucursal. Requiere Bearer token.
 
-**Parámetros de consulta (query) — uno de los dos**
+**Parámetros de consulta (query) — uno de los dos, + paginación opcional**
 
 <ObjectInfoCard title="subsidiaryId" type="string" description="ID interno de la sucursal" required={false} />
 <ObjectInfoCard title="externalId" type="string" description="ID externo de la sucursal (extId); se resuelve al ID interno" required={false} />
+<ObjectInfoCard title="page" type="number" description="Página a devolver (default 1)" required={false} />
+<ObjectInfoCard title="limit" type="number" description="Cantidad de items por página (default 20)" required={false} />
+<ObjectInfoCard title="order" type="string" description="Dirección del orden: asc | desc (default desc)" required={false} />
+<ObjectInfoCard title="orderBy" type="string" description="Campo por el cual ordenar (default CreatedDate)" required={false} />
 
 **Ejemplo.**
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X GET
-    --url 'https://api.lumarketo.cl/public/product/list?subsidiaryId=6403c1fbc961b1bdaaf7fd18'
+    --url 'https://api.lumarketo.cl/public/product/list?subsidiaryId=6403c1fbc961b1bdaaf7fd18&page=1&limit=20'
     --header 'Authorization: Bearer <access_token>'
 ```
 
-`data` es un arreglo de productos. Cada producto: `{ id, name, category, show, children: [{ sku, barcode, price, withDiscount, discount, show, stocks: [{ subsidiaryId, qty, show }], integrations: [{ subsidiaryId, productIdFudo, productCodeToteat, extId }] }] }`.
+`data` es un objeto paginado: `{ docs, totalDocs, limit, page, totalPages, hasNextPage, hasPrevPage }`. `docs` es el arreglo de productos. Cada producto: `{ id, name, category, show, children: [{ sku, barcode, price, withDiscount, discount, show, stocks: [{ subsidiaryId, qty, show }], integrations: [{ subsidiaryId, productIdFudo, productCodeToteat, extId }] }] }`.
 
 ## Producto por ID externo (Fudo / Toteat)
 
