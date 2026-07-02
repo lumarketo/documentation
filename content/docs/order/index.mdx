@@ -55,7 +55,7 @@ import { JsonViewer, ObjectInfoCard } from "@/components/css/card"
         textDecoration: "none",
       }}
     >
-      https://api.lumarketo.cl/public/order
+      https://api.public.lumarketo.cl/order
     </h6>
   </div>
 </>
@@ -82,7 +82,7 @@ las solicitudes.
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X GET
-    --url 'https://api.lumarketo.cl/public/order?orderNumber=15'
+    --url 'https://api.public.lumarketo.cl/order?orderNumber=15'
     --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
 ```
 
@@ -617,7 +617,7 @@ curl -v -X GET
   <h6
     style={{ fontSize: 14, height: 30, marginLeft: 5, textDecoration: "none" }}
   >
-    https://api.lumarketo.cl/public/order/all
+    https://api.public.lumarketo.cl/order/all
   </h6>
 </div>
 Debe incluir un token de acceso en el encabezado de **'Authorization'** en todas
@@ -626,7 +626,7 @@ las solicitudes.
 **Ratelimit**
 
 <>
-  <p>Cada 10 minutos</p>
+  <p>Cada 2 minutos</p>
 </>
 
 **Parámetros de consulta**
@@ -639,7 +639,7 @@ las solicitudes.
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X GET
-    --url 'https://api.lumarketo.cl/public/order/all?startDate=2023/10/01&endDate=2023/10/08'
+    --url 'https://api.public.lumarketo.cl/order/all?startDate=2023/10/01&endDate=2023/10/08'
     --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
 ```
 

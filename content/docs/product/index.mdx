@@ -6,7 +6,7 @@ description:
 import { ResponseAccordionComponent } from "@/components/css/accordion"
 import { JsonViewer, ObjectInfoCard } from "@/components/css/card"
 
-## Modificar precio de producto
+## Modificar producto
 
 <>
   <div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
@@ -55,7 +55,7 @@ import { JsonViewer, ObjectInfoCard } from "@/components/css/card"
         textDecoration: "none",
       }}
     >
-      https://api.lumarketo.cl/public/product/price
+      https://api.public.lumarketo.cl/product
     </h6>
   </div>
 </>
@@ -71,7 +71,7 @@ las solicitudes.
 
 **Cuerpo de la consulta**
 
-Identificá el producto con `sku` **o** `externalId` (uno de los dos) y enviá el nuevo `price`.
+Identificá el producto con `sku` **o** `externalId` (uno de los dos) y enviá al menos uno de `price`, `name` o `description`.
 
 <ObjectInfoCard
   title="sku"
@@ -88,25 +88,38 @@ Identificá el producto con `sku` **o** `externalId` (uno de los dos) y enviá e
 <ObjectInfoCard
   title="price"
   type="number"
-  description="Nuevo precio del producto"
+  description="Nuevo precio del SKU (nivel child)."
+  required={false}
+/>
+<ObjectInfoCard
+  title="name"
+  type="string"
+  description="Nuevo nombre del producto (nivel producto, compartido por todos sus SKU)."
+  required={false}
+/>
+<ObjectInfoCard
+  title="description"
+  type="string"
+  description="Nueva descripción del producto (nivel producto). Enviá &quot;&quot; para limpiarla."
+  required={false}
 />
 
 **Ejemplo.**
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X PUT
-    --url 'https://api.lumarketo.cl/public/product/price'
+    --url 'https://api.public.lumarketo.cl/product'
     --header 'Authorization: Bearer <access_token>'
-    --data '{ "sku": 50, "price": 2560 }'
+    --data '{ "sku": 50, "price": 2560, "name": "Hamburguesa clásica" }'
 ```
 
-Identificando el producto por `externalId` de integración (sin `sku`):
+Identificando el producto por `externalId` de integración (sin `sku`), solo el nombre:
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X PUT
-    --url 'https://api.lumarketo.cl/public/product/price'
+    --url 'https://api.public.lumarketo.cl/product'
     --header 'Authorization: Bearer <access_token>'
-    --data '{ "externalId": "777", "price": 2560 }'
+    --data '{ "externalId": "777", "name": "Nuevo nombre" }'
 ```
 
 ### Respuestas
@@ -199,7 +212,7 @@ curl -v -X PUT
     <div style={{ display: "inline-flex", backgroundColor: "#674ead", height: "20px", fontSize: "10px", alignItems: "center", borderRadius: "16px", justifyContent: "center" }}>
       <div style={{ display: "flex", alignItems: "center", paddingLeft: "12px", paddingRight: "12px", fontWeight: 600, color: "#fff" }}>PUT</div>
     </div>
-    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.lumarketo.cl/public/product/stock</h6>
+    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.public.lumarketo.cl/product/stock</h6>
   </div>
 </>
 
@@ -213,35 +226,35 @@ Actualiza el stock por sucursal de un producto. Debe incluir un token de acceso 
 
 **Cuerpo de la consulta**
 
-Identificá el producto con `sku` **o** `externalId` (uno de los dos) y enviá el arreglo `stocks` (podés actualizar varias sucursales a la vez).
+Objeto **plano**: identificá el producto con `sku` **o** `externalId`, la sucursal con `subsidiaryId` **o** `subsidiaryExternalId`, y enviá el nuevo `qty`.
 
 <ObjectInfoCard title="sku" type="number" description="SKU del producto. Requerido salvo que envíes externalId." required={false} />
-<ObjectInfoCard title="externalId" type="string" description="ID de integración (Fudo/Toteat) del producto, en children.integrations (plataforma auto-detectada)." required={false} />
-<ObjectInfoCard
-  title="stocks"
-  type="array"
-  description="Stock por sucursal (mínimo 1). Solo modifica entradas ya existentes."
-  content={
-    <>
-      <ObjectInfoCard title="subsidiaryId" type="string" description="ID interno de la sucursal (o usá externalSubsidiaryId)" required={false} />
-      <ObjectInfoCard title="externalSubsidiaryId" type="string" description="extId de la sucursal (Fudo/Toteat); se resuelve al ID interno. (externalId se acepta como alias legacy.)" required={false} />
-      <ObjectInfoCard title="qty" type="number" description="Cantidad del producto" />
-    </>
-  }
-/>
+<ObjectInfoCard title="externalId" type="string" description="ID de integración (Fudo/Toteat) del producto (plataforma auto-detectada)." required={false} />
+<ObjectInfoCard title="subsidiaryId" type="string" description="ID interno de la sucursal. Requerido salvo que envíes subsidiaryExternalId." required={false} />
+<ObjectInfoCard title="subsidiaryExternalId" type="string" description="extId de la sucursal (Fudo/Toteat); se resuelve al ID interno." required={false} />
+<ObjectInfoCard title="qty" type="number" description="Nueva cantidad de stock en esa sucursal" />
 
 **Ejemplo.**
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X PUT
-    --url 'https://api.lumarketo.cl/public/product/stock'
+    --url 'https://api.public.lumarketo.cl/product/stock'
     --header 'Authorization: Bearer <access_token>'
-    --data '{ "sku": 50, "stocks": [{ "subsidiaryId": "XXXXXXXXXXXXXXXXXXX", "qty": 6000 }, { "externalSubsidiaryId": "1546626", "qty": 40 }] }'
+    --data '{ "sku": 50, "subsidiaryId": "XXXXXXXXXXXXXXXXXXX", "qty": 6000 }'
 ```
 
-La respuesta tiene el mismo formato que "Modificar precio de producto" (`{ success, message, data: {} }`).
+Identificando por externalId de producto + externalId de sucursal:
 
-## Modificar precios en lote
+```ts showLineNumbers /appDir: true/
+curl -v -X PUT
+    --url 'https://api.public.lumarketo.cl/product/stock'
+    --header 'Authorization: Bearer <access_token>'
+    --data '{ "externalId": "777", "subsidiaryExternalId": "1546626", "qty": 40 }'
+```
+
+Actualiza una sucursal por llamada (solo entradas ya existentes). La respuesta tiene el mismo formato que "Modificar producto" (`{ success, message, data: {} }`).
+
+## Modificar productos en lote
 
 <>
   <div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
@@ -290,12 +303,12 @@ La respuesta tiene el mismo formato que "Modificar precio de producto" (`{ succe
         textDecoration: "none",
       }}
     >
-      https://api.lumarketo.cl/public/product/price/batch
+      https://api.public.lumarketo.cl/product/batch
     </h6>
   </div>
 </>
-Actualiza el precio de varios productos en una sola solicitud. Debe incluir un token
-de acceso en el encabezado de **'Authorization'** en todas las solicitudes.
+Actualiza varios productos (price/name/description) en una sola solicitud. Debe incluir
+un token de acceso en el encabezado de **'Authorization'** en todas las solicitudes.
 
 Los items inválidos o cuyo producto no exista no detienen la operación: se procesan
 los válidos y los descartados se informan en `data.errors`.
@@ -330,21 +343,34 @@ los válidos y los descartados se informan en `data.errors`.
       <ObjectInfoCard
         title="price"
         type="number"
-        description="Nuevo precio del producto"
+        description="Nuevo precio del SKU (nivel child)."
+        required={false}
+      />
+      <ObjectInfoCard
+        title="name"
+        type="string"
+        description="Nuevo nombre del producto (nivel producto)."
+        required={false}
+      />
+      <ObjectInfoCard
+        title="description"
+        type="string"
+        description="Nueva descripción del producto (nivel producto)."
+        required={false}
       />
     </>
   }
 />
 
-Cada item se identifica con **sku** o **externalId** (uno de los dos) y `price` es requerido. Los items inválidos o cuyo producto no exista no abortan el batch: se reportan en `data.errors` con `index`, `sku`, `externalId` y el mensaje.
+Cada item se identifica con **sku** o **externalId** (uno de los dos) y debe incluir al menos uno de `price`/`name`/`description`. Los items inválidos o cuyo producto no exista no abortan el batch: se reportan en `data.errors` con `index`, `sku`, `externalId` y el mensaje.
 
 **Ejemplo.**
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X PUT
-    --url 'https://api.lumarketo.cl/public/product/price/batch'
+    --url 'https://api.public.lumarketo.cl/product/batch'
     --header 'Authorization: Bearer <access_token>'
-    --data '{ "products": [{ "sku": 50, "price": 2560 }, { "externalId": "777", "price": 1990 }] }'
+    --data '{ "products": [{ "sku": 50, "price": 2560, "name": "Hamburguesa" }, { "externalId": "777", "description": "Nueva desc" }] }'
 ```
 
 ### Respuestas
@@ -462,45 +488,41 @@ curl -v -X PUT
     <div style={{ display: "inline-flex", backgroundColor: "#674ead", height: "20px", fontSize: "10px", alignItems: "center", borderRadius: "16px", justifyContent: "center" }}>
       <div style={{ display: "flex", alignItems: "center", paddingLeft: "12px", paddingRight: "12px", fontWeight: 600, color: "#fff" }}>PUT</div>
     </div>
-    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.lumarketo.cl/public/product/stock/batch</h6>
+    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.public.lumarketo.cl/product/stock/batch</h6>
   </div>
 </>
 
-Actualiza el stock de varios productos en una sola solicitud. Debe incluir un token de acceso en el encabezado de **'Authorization'**.
+Actualiza el stock en una sola solicitud. Cada item del arreglo es **plano** (un producto + una sucursal + qty). Debe incluir un token de acceso en el encabezado de **'Authorization'**.
 
 **Cuerpo de la consulta**
 
 <ObjectInfoCard
   title="products"
   type="array"
-  description="Arreglo de productos a actualizar (mínimo 1)"
+  description="Arreglo de items planos a actualizar (mínimo 1)"
   content={
     <>
       <ObjectInfoCard title="sku" type="number" description="SKU del producto. Requerido salvo que envíes externalId." required={false} />
       <ObjectInfoCard title="externalId" type="string" description="ID de integración (Fudo/Toteat) del producto (plataforma auto-detectada)." required={false} />
-      <ObjectInfoCard
-        title="stocks"
-        type="array"
-        description="Stock por sucursal (mínimo 1). Cada stock con subsidiaryId o externalSubsidiaryId de la sucursal + qty."
-      />
+      <ObjectInfoCard title="subsidiaryId" type="string" description="ID interno de la sucursal. Requerido salvo que envíes subsidiaryExternalId." required={false} />
+      <ObjectInfoCard title="subsidiaryExternalId" type="string" description="extId de la sucursal (Fudo/Toteat); se resuelve al ID interno." required={false} />
+      <ObjectInfoCard title="qty" type="number" description="Nueva cantidad de stock en esa sucursal" />
     </>
   }
 />
 
-Cada item se identifica con **sku** o **externalId** (uno de los dos) y `stocks` es requerido. Los items inválidos o cuyo producto no exista no abortan el batch: se reportan en `data.errors` con `index`, `sku`, `externalId` y el mensaje.
+Cada item identifica el producto con **sku** o **externalId**, la sucursal con **subsidiaryId** o **subsidiaryExternalId**, y `qty` es requerido. Para actualizar varias sucursales del mismo producto, mandá un item por sucursal (se agrupan por producto). Los items inválidos o cuyo producto no exista no abortan el batch: se reportan en `data.errors` con `index`, `sku`, `externalId` y el mensaje.
 
 **Ejemplo.**
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X PUT
-    --url 'https://api.lumarketo.cl/public/product/stock/batch'
+    --url 'https://api.public.lumarketo.cl/product/stock/batch'
     --header 'Authorization: Bearer <access_token>'
-    --data '{ "products": [{ "sku": 50, "stocks": [{ "subsidiaryId": "XXXXXXXXXXXXXXXXXXX", "qty": 6000 }] }, { "externalId": "777", "stocks": [{ "externalSubsidiaryId": "1546626", "qty": 30 }] }] }'
+    --data '{ "products": [{ "sku": 50, "subsidiaryId": "XXXXXXXXXXXXXXXXXXX", "qty": 6000 }, { "externalId": "777", "subsidiaryExternalId": "1546626", "qty": 30 }] }'
 ```
 
-La respuesta tiene el mismo formato que "Modificar precios en lote" (`{ updated, total, errors }`).
-
-> **Nota:** en `stocks`, cada item identifica la sucursal por `subsidiaryId` (ID interno) **o** `externalSubsidiaryId` (extId de la sucursal en Fudo/Toteat, se resuelve automáticamente al ID interno). `externalId` se acepta como alias legacy. Aplica en los endpoints de stock (individual y en lote).
+La respuesta tiene el mismo formato que "Modificar productos en lote" (`{ updated, total, errors }`).
 
 ## Productos por sucursal
 
@@ -509,7 +531,7 @@ La respuesta tiene el mismo formato que "Modificar precios en lote" (`{ updated,
     <div style={{ display: "inline-flex", backgroundColor: "green", height: "20px", fontSize: "10px", alignItems: "center", borderRadius: "16px", justifyContent: "center" }}>
       <div style={{ display: "flex", alignItems: "center", paddingLeft: "12px", paddingRight: "12px", fontWeight: 600, color: "#fff" }}>GET</div>
     </div>
-    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.lumarketo.cl/public/product/list</h6>
+    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.public.lumarketo.cl/product/list</h6>
   </div>
 </>
 
@@ -528,7 +550,7 @@ Lista los productos disponibles en una sucursal. Requiere Bearer token.
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X GET
-    --url 'https://api.lumarketo.cl/public/product/list?subsidiaryId=6403c1fbc961b1bdaaf7fd18&page=1&limit=20'
+    --url 'https://api.public.lumarketo.cl/product/list?subsidiaryId=6403c1fbc961b1bdaaf7fd18&page=1&limit=20'
     --header 'Authorization: Bearer <access_token>'
 ```
 
@@ -541,7 +563,7 @@ curl -v -X GET
     <div style={{ display: "inline-flex", backgroundColor: "green", height: "20px", fontSize: "10px", alignItems: "center", borderRadius: "16px", justifyContent: "center" }}>
       <div style={{ display: "flex", alignItems: "center", paddingLeft: "12px", paddingRight: "12px", fontWeight: 600, color: "#fff" }}>GET</div>
     </div>
-    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.lumarketo.cl/public/product</h6>
+    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.public.lumarketo.cl/product</h6>
   </div>
 </>
 
@@ -561,7 +583,7 @@ Obtiene un producto por su `sku` **o** por su `externalId` de integración (Fudo
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X GET
-    --url 'https://api.lumarketo.cl/public/product?sku=931'
+    --url 'https://api.public.lumarketo.cl/product?sku=931'
     --header 'Authorization: Bearer <access_token>'
 ```
 
@@ -569,7 +591,7 @@ Identificando por `externalId` de integración:
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X GET
-    --url 'https://api.lumarketo.cl/public/product?externalId=777'
+    --url 'https://api.public.lumarketo.cl/product?externalId=777'
     --header 'Authorization: Bearer <access_token>'
 ```
 

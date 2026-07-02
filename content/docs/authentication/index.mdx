@@ -20,7 +20,7 @@ Incluya el access token en el header **`Authorization: Bearer <access token>`** 
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X GET
-    --url 'https://api.lumarketo.cl/public/order/all?startDate=2026-06-01&endDate=2026-06-30'
+    --url 'https://api.public.lumarketo.cl/order/all?startDate=2026-06-01&endDate=2026-06-30'
     --header 'Authorization: Bearer <access_token>'
 ```
 
@@ -32,7 +32,7 @@ Cuando el access token expira (1h), obtenga uno nuevo con su **refresh token**:
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X POST
-    --url 'https://api.lumarketo.cl/public/token/refresh'
+    --url 'https://api.public.lumarketo.cl/token/refresh'
     --header 'Content-Type: application/json'
     --data '{ "refreshToken": "<refresh_token>" }'
 ```
@@ -54,4 +54,10 @@ Respuesta:
 
 ## Rate limit
 
-Cada endpoint tiene un límite de frecuencia por empresa. Si lo supera, la API responde **429 (Too Many Requests)** — reintente luego del intervalo.
+La API aplica límites de frecuencia **por empresa** (identificada por su token), en dos capas:
+
+**Límite por endpoint → 429.** Cada endpoint acepta ~1 request por segundo. La excepción es `GET /order/all` (pensado para sincronización): **1 request cada 2 minutos**. Si lo supera, la API responde **429 (Too Many Requests)**; reintente luego del intervalo.
+
+**Tope anti-abuso → 403.** Un límite superior protege la API del uso excesivo: hasta **1000 requests / 5 min** por token en general, y **100 / 5 min** para `GET /order/all`. Superarlo bloquea temporalmente el token con **403 (Forbidden)**.
+
+En condiciones normales, respetando los intervalos, solo podría toparse (si acaso) con el **429** y nunca con el **403**.

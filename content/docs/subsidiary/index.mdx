@@ -55,7 +55,7 @@ import { JsonViewer, ObjectInfoCard } from "@/components/css/card"
         textDecoration: "none",
       }}
     >
-      https://api.lumarketo.cl/public/subsidiary/all
+      https://api.public.lumarketo.cl/subsidiary/all
     </h6>
   </div>
 </>
@@ -65,7 +65,7 @@ las solicitudes.
 **Ratelimit**
 
 <>
-  <p>Cada 10 minutos</p>
+  <p>Cada 1 segundo</p>
 </>
 
 
@@ -73,7 +73,7 @@ las solicitudes.
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X GET
-    --url 'https://api.lumarketo.cl/public/subsidiary/all'
+    --url 'https://api.public.lumarketo.cl/subsidiary/all'
     --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
 ```
 
@@ -265,7 +265,7 @@ curl -v -X GET
     <div style={{ display: "inline-flex", backgroundColor: "green", height: "20px", fontSize: "10px", alignItems: "center", borderRadius: "16px", justifyContent: "center" }}>
       <div style={{ display: "flex", alignItems: "center", paddingLeft: "12px", paddingRight: "12px", fontWeight: 600, color: "#fff" }}>GET</div>
     </div>
-    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.lumarketo.cl/public/subsidiary</h6>
+    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.public.lumarketo.cl/subsidiary</h6>
   </div>
 </>
 
@@ -280,7 +280,7 @@ Obtiene una sucursal por su ID interno **o** su ID externo (`extId`, el ID en Fu
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X GET
-    --url 'https://api.lumarketo.cl/public/subsidiary?id=6403c1fbc961b1bdaaf7fd18'
+    --url 'https://api.public.lumarketo.cl/subsidiary?id=6403c1fbc961b1bdaaf7fd18'
     --header 'Authorization: Bearer <access_token>'
 ```
 
