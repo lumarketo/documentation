@@ -216,7 +216,7 @@ curl -v -X PUT
   </div>
 </>
 
-Actualiza el stock por sucursal de un producto. Debe incluir un token de acceso en el encabezado de **'Authorization'**.
+Actualiza el stock de un producto. Debe incluir un token de acceso en el encabezado de **'Authorization'**.
 
 **Ratelimit**
 
@@ -226,13 +226,10 @@ Actualiza el stock por sucursal de un producto. Debe incluir un token de acceso 
 
 **Cuerpo de la consulta**
 
-Objeto **plano**: identificá el producto con `sku` **o** `externalId`, la sucursal con `subsidiaryId` **o** `subsidiaryExternalId`, y enviá el nuevo `qty`.
+Solo el `externalId` del producto (id de integración Fudo/Toteat) y el nuevo `qty`. **Ese `externalId` ya identifica la sucursal**: cada mapeo de integración del producto guarda a qué sucursal pertenece, así que el sistema resuelve la sucursal automáticamente y actualiza su stock. Ya no se envía `sku`, `subsidiaryId` ni `subsidiaryExternalId`.
 
-<ObjectInfoCard title="sku" type="number" description="SKU del producto. Requerido salvo que envíes externalId." required={false} />
-<ObjectInfoCard title="externalId" type="string" description="ID de integración (Fudo/Toteat) del producto (plataforma auto-detectada)." required={false} />
-<ObjectInfoCard title="subsidiaryId" type="string" description="ID interno de la sucursal. Requerido salvo que envíes subsidiaryExternalId." required={false} />
-<ObjectInfoCard title="subsidiaryExternalId" type="string" description="extId de la sucursal (Fudo/Toteat); se resuelve al ID interno." required={false} />
-<ObjectInfoCard title="qty" type="number" description="Nueva cantidad de stock en esa sucursal" />
+<ObjectInfoCard title="externalId" type="string" description="Requerido. ID de integración (Fudo/Toteat) del producto. Identifica producto y sucursal (plataforma auto-detectada)." />
+<ObjectInfoCard title="qty" type="number" description="Requerido. Nueva cantidad de stock." />
 
 **Ejemplo.**
 
@@ -240,19 +237,10 @@ Objeto **plano**: identificá el producto con `sku` **o** `externalId`, la sucur
 curl -v -X PUT
     --url 'https://api.public.lumarketo.cl/product/stock'
     --header 'Authorization: Bearer <access_token>'
-    --data '{ "sku": 50, "subsidiaryId": "XXXXXXXXXXXXXXXXXXX", "qty": 6000 }'
+    --data '{ "externalId": "777", "qty": 40 }'
 ```
 
-Identificando por externalId de producto + externalId de sucursal:
-
-```ts showLineNumbers /appDir: true/
-curl -v -X PUT
-    --url 'https://api.public.lumarketo.cl/product/stock'
-    --header 'Authorization: Bearer <access_token>'
-    --data '{ "externalId": "777", "subsidiaryExternalId": "1546626", "qty": 40 }'
-```
-
-Actualiza una sucursal por llamada (solo entradas ya existentes). La respuesta tiene el mismo formato que "Modificar producto" (`{ success, message, data: {} }`).
+Solo modifica entradas de stock ya existentes. La respuesta tiene el mismo formato que "Modificar producto" (`{ success, message, data: {} }`); `success: false` si el producto no existe o el `externalId` no tiene una sucursal con stock asociado.
 
 ## Modificar productos en lote
 
@@ -492,26 +480,23 @@ curl -v -X PUT
   </div>
 </>
 
-Actualiza el stock en una sola solicitud. Cada item del arreglo es **plano** (un producto + una sucursal + qty). Debe incluir un token de acceso en el encabezado de **'Authorization'**.
+Actualiza el stock de varios productos en una sola solicitud. Cada item lleva solo el `externalId` del producto (que ya identifica su sucursal) y `qty`. Debe incluir un token de acceso en el encabezado de **'Authorization'**.
 
 **Cuerpo de la consulta**
 
 <ObjectInfoCard
   title="products"
   type="array"
-  description="Arreglo de items planos a actualizar (mínimo 1)"
+  description="Arreglo de items a actualizar (mínimo 1)"
   content={
     <>
-      <ObjectInfoCard title="sku" type="number" description="SKU del producto. Requerido salvo que envíes externalId." required={false} />
-      <ObjectInfoCard title="externalId" type="string" description="ID de integración (Fudo/Toteat) del producto (plataforma auto-detectada)." required={false} />
-      <ObjectInfoCard title="subsidiaryId" type="string" description="ID interno de la sucursal. Requerido salvo que envíes subsidiaryExternalId." required={false} />
-      <ObjectInfoCard title="subsidiaryExternalId" type="string" description="extId de la sucursal (Fudo/Toteat); se resuelve al ID interno." required={false} />
-      <ObjectInfoCard title="qty" type="number" description="Nueva cantidad de stock en esa sucursal" />
+      <ObjectInfoCard title="externalId" type="string" description="Requerido. ID de integración (Fudo/Toteat) del producto. Identifica producto y sucursal (plataforma auto-detectada)." />
+      <ObjectInfoCard title="qty" type="number" description="Requerido. Nueva cantidad de stock." />
     </>
   }
 />
 
-Cada item identifica el producto con **sku** o **externalId**, la sucursal con **subsidiaryId** o **subsidiaryExternalId**, y `qty` es requerido. Para actualizar varias sucursales del mismo producto, mandá un item por sucursal (se agrupan por producto). Los items inválidos o cuyo producto no exista no abortan el batch: se reportan en `data.errors` con `index`, `sku`, `externalId` y el mensaje.
+Cada item trae solo `externalId` + `qty`. **El `externalId` ya identifica la sucursal** (cada mapeo de integración guarda su sucursal), así que no se envía `sku` ni datos de sucursal. Los items inválidos, cuyo producto no exista, o cuyo `externalId` no tenga una sucursal con stock, no abortan el batch: se reportan en `data.errors` con `index`, `externalId` y el mensaje.
 
 **Ejemplo.**
 
@@ -519,7 +504,7 @@ Cada item identifica el producto con **sku** o **externalId**, la sucursal con *
 curl -v -X PUT
     --url 'https://api.public.lumarketo.cl/product/stock/batch'
     --header 'Authorization: Bearer <access_token>'
-    --data '{ "products": [{ "sku": 50, "subsidiaryId": "XXXXXXXXXXXXXXXXXXX", "qty": 6000 }, { "externalId": "777", "subsidiaryExternalId": "1546626", "qty": 30 }] }'
+    --data '{ "products": [{ "externalId": "777", "qty": 6000 }, { "externalId": "t-955", "qty": 30 }] }'
 ```
 
 La respuesta tiene el mismo formato que "Modificar productos en lote" (`{ updated, total, errors }`).
