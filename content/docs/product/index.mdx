@@ -71,7 +71,7 @@ las solicitudes.
 
 **Cuerpo de la consulta**
 
-Identificá el producto con `sku` **o** `externalId` (uno de los dos) y enviá al menos uno de `price`, `name` o `description`.
+Identificá el producto con `sku` **o** `externalId` (uno de los dos) y enviá al menos uno de `price`, `name`, `description` o `show`.
 
 <ObjectInfoCard
   title="sku"
@@ -103,6 +103,12 @@ Identificá el producto con `sku` **o** `externalId` (uno de los dos) y enviá a
   description="Nueva descripción del producto (nivel producto). Enviá &quot;&quot; para limpiarla."
   required={false}
 />
+<ObjectInfoCard
+  title="show"
+  type="boolean"
+  description="Visibilidad del PRODUCTO entero (nivel producto). true = visible, false = no visible. No confundir con la visibilidad del stock por sucursal (esa va en /product/stock)."
+  required={false}
+/>
 
 **Ejemplo.**
 
@@ -110,7 +116,7 @@ Identificá el producto con `sku` **o** `externalId` (uno de los dos) y enviá a
 curl -v -X PUT
     --url 'https://api.public.lumarketo.cl/product'
     --header 'Authorization: Bearer <access_token>'
-    --data '{ "sku": 50, "price": 2560, "name": "Hamburguesa clásica" }'
+    --data '{ "sku": 50, "price": 2560, "show": false }'
 ```
 
 Identificando el producto por `externalId` de integración (sin `sku`), solo el nombre:
@@ -347,11 +353,17 @@ los válidos y los descartados se informan en `data.errors`.
         description="Nueva descripción del producto (nivel producto)."
         required={false}
       />
+      <ObjectInfoCard
+        title="show"
+        type="boolean"
+        description="Visibilidad del PRODUCTO entero (nivel producto). No confundir con la visibilidad del stock por sucursal."
+        required={false}
+      />
     </>
   }
 />
 
-Cada item se identifica con **sku** o **externalId** (uno de los dos) y debe incluir al menos uno de `price`/`name`/`description`. Los items inválidos o cuyo producto no exista no abortan el batch: se reportan en `data.errors` con `index`, `sku`, `externalId` y el mensaje.
+Cada item se identifica con **sku** o **externalId** (uno de los dos) y debe incluir al menos uno de `price`/`name`/`description`/`show`. Los items inválidos o cuyo producto no exista no abortan el batch: se reportan en `data.errors` con `index`, `sku`, `externalId` y el mensaje.
 
 **Ejemplo.**
 
@@ -359,7 +371,7 @@ Cada item se identifica con **sku** o **externalId** (uno de los dos) y debe inc
 curl -v -X PUT
     --url 'https://api.public.lumarketo.cl/product/batch'
     --header 'Authorization: Bearer <access_token>'
-    --data '{ "products": [{ "sku": 50, "price": 2560, "name": "Hamburguesa" }, { "externalId": "777", "description": "Nueva desc" }] }'
+    --data '{ "products": [{ "sku": 50, "price": 2560, "show": false }, { "externalId": "777", "description": "Nueva desc" }] }'
 ```
 
 ### Respuestas
