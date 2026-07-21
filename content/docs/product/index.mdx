@@ -232,11 +232,15 @@ Actualiza el stock de un producto. Debe incluir un token de acceso en el encabez
 
 **Cuerpo de la consulta**
 
-Solo el `externalId` del producto (id de integración Fudo/Toteat) y el nuevo `qty`. **Ese `externalId` ya identifica la sucursal**: cada mapeo de integración del producto guarda a qué sucursal pertenece, así que el sistema resuelve la sucursal automáticamente y actualiza su stock. Ya no se envía `sku`, `subsidiaryId` ni `subsidiaryExternalId`.
+El `externalId` del producto (id de integración Fudo/Toteat) y el nuevo `qty`. Por defecto **el `externalId` ya identifica la sucursal**: cada mapeo de integración del producto guarda a qué sucursal pertenece, así que el sistema la resuelve automáticamente.
 
-<ObjectInfoCard title="externalId" type="string" description="Requerido. ID de integración (Fudo/Toteat) del producto. Identifica producto y sucursal (plataforma auto-detectada)." />
+> **⚠️ Importante — `externalId` repetido entre sucursales.** Si el mismo `externalId` de producto se repite en **varias sucursales** (por ejemplo, todas tus sucursales usan el mismo id externo por producto), no se puede saber a cuál actualizar. En ese caso **debés enviar la sucursal** con `subsidiaryExternalId` (extId de la sucursal) o `subsidiaryId` (id interno) para diferenciarlas.
+
+<ObjectInfoCard title="externalId" type="string" description="Requerido. ID de integración (Fudo/Toteat) del producto. Identifica producto y, por defecto, sucursal (plataforma auto-detectada)." />
 <ObjectInfoCard title="qty" type="number" description="Requerido. Nueva cantidad de stock." />
 <ObjectInfoCard title="show" type="boolean" description="Opcional. Visibilidad del stock en esa sucursal (true = visible, false = no visible). Si se omite, no se toca." required={false} />
+<ObjectInfoCard title="subsidiaryExternalId" type="string" description="Opcional. extId de la sucursal. Úsalo para desambiguar cuando el externalId del producto se repite entre sucursales." required={false} />
+<ObjectInfoCard title="subsidiaryId" type="string" description="Opcional. ID interno de la sucursal (alternativa a subsidiaryExternalId)." required={false} />
 
 **Ejemplo.**
 
@@ -247,7 +251,16 @@ curl -v -X PUT
     --data '{ "externalId": "777", "qty": 40, "show": false }'
 ```
 
-Solo modifica entradas de stock ya existentes. La respuesta tiene el mismo formato que "Modificar producto" (`{ success, message, data: {} }`); `success: false` si el producto no existe o el `externalId` no tiene una sucursal con stock asociado.
+Desambiguando la sucursal (externalId repetido entre sucursales):
+
+```ts showLineNumbers /appDir: true/
+curl -v -X PUT
+    --url 'https://api.public.lumarketo.cl/product/stock'
+    --header 'Authorization: Bearer <access_token>'
+    --data '{ "externalId": "777", "qty": 40, "subsidiaryExternalId": "1546626" }'
+```
+
+Solo modifica entradas de stock ya existentes. La respuesta tiene el mismo formato que "Modificar producto" (`{ success, message, data: {} }`); `success: false` si el producto o la sucursal no existen, o si el `externalId` no tiene una sucursal con stock asociado.
 
 ## Modificar productos en lote
 
@@ -503,14 +516,20 @@ Actualiza el stock de varios productos en una sola solicitud. Cada item lleva so
   description="Arreglo de items a actualizar (mínimo 1)"
   content={
     <>
-      <ObjectInfoCard title="externalId" type="string" description="Requerido. ID de integración (Fudo/Toteat) del producto. Identifica producto y sucursal (plataforma auto-detectada)." />
+      <ObjectInfoCard title="externalId" type="string" description="Requerido. ID de integración (Fudo/Toteat) del producto. Identifica producto y, por defecto, sucursal (plataforma auto-detectada)." />
       <ObjectInfoCard title="qty" type="number" description="Requerido. Nueva cantidad de stock." />
       <ObjectInfoCard title="show" type="boolean" description="Opcional. Visibilidad del stock en esa sucursal (true/false). Si se omite, no se toca." required={false} />
+      <ObjectInfoCard title="subsidiaryExternalId" type="string" description="Opcional. extId de la sucursal. Úsalo para desambiguar cuando el externalId del producto se repite entre sucursales." required={false} />
+      <ObjectInfoCard title="subsidiaryId" type="string" description="Opcional. ID interno de la sucursal (alternativa a subsidiaryExternalId)." required={false} />
     </>
   }
 />
 
-Cada item trae `externalId` + `qty` (y `show` opcional). **El `externalId` ya identifica la sucursal** (cada mapeo de integración guarda su sucursal), así que no se envía `sku` ni datos de sucursal. Los items inválidos, cuyo producto no exista, o cuyo `externalId` no tenga una sucursal con stock, no abortan el batch: se reportan en `data.errors` con `index`, `externalId` y el mensaje.
+Cada item trae `externalId` + `qty` (y `show` opcional). Por defecto **el `externalId` ya identifica la sucursal** (cada mapeo de integración guarda su sucursal).
+
+> **⚠️ Importante — `externalId` repetido entre sucursales.** Si el mismo `externalId` de producto se repite en varias sucursales, agregá por item la sucursal con `subsidiaryExternalId` (extId) o `subsidiaryId` (id interno) para diferenciarlas. Si se omite, la sucursal se deriva del `externalId` (solo sirve cuando ese id es único).
+
+Los items inválidos, cuyo producto o sucursal no exista, o cuyo `externalId` no tenga una sucursal con stock, no abortan el batch: se reportan en `data.errors` con `index`, `externalId` y el mensaje.
 
 **Ejemplo.**
 
@@ -518,7 +537,7 @@ Cada item trae `externalId` + `qty` (y `show` opcional). **El `externalId` ya id
 curl -v -X PUT
     --url 'https://api.public.lumarketo.cl/product/stock/batch'
     --header 'Authorization: Bearer <access_token>'
-    --data '{ "products": [{ "externalId": "777", "qty": 6000, "show": false }, { "externalId": "t-955", "qty": 30 }] }'
+    --data '{ "products": [{ "externalId": "777", "qty": 6000, "show": false }, { "externalId": "777", "qty": 30, "subsidiaryExternalId": "1546626" }] }'
 ```
 
 La respuesta tiene el mismo formato que "Modificar productos en lote" (`{ updated, total, errors }`).
