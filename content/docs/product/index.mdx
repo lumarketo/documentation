@@ -230,6 +230,7 @@ Solo el `externalId` del producto (id de integración Fudo/Toteat) y el nuevo `q
 
 <ObjectInfoCard title="externalId" type="string" description="Requerido. ID de integración (Fudo/Toteat) del producto. Identifica producto y sucursal (plataforma auto-detectada)." />
 <ObjectInfoCard title="qty" type="number" description="Requerido. Nueva cantidad de stock." />
+<ObjectInfoCard title="show" type="boolean" description="Opcional. Visibilidad del stock en esa sucursal (true = visible, false = no visible). Si se omite, no se toca." required={false} />
 
 **Ejemplo.**
 
@@ -237,7 +238,7 @@ Solo el `externalId` del producto (id de integración Fudo/Toteat) y el nuevo `q
 curl -v -X PUT
     --url 'https://api.public.lumarketo.cl/product/stock'
     --header 'Authorization: Bearer <access_token>'
-    --data '{ "externalId": "777", "qty": 40 }'
+    --data '{ "externalId": "777", "qty": 40, "show": false }'
 ```
 
 Solo modifica entradas de stock ya existentes. La respuesta tiene el mismo formato que "Modificar producto" (`{ success, message, data: {} }`); `success: false` si el producto no existe o el `externalId` no tiene una sucursal con stock asociado.
@@ -492,11 +493,12 @@ Actualiza el stock de varios productos en una sola solicitud. Cada item lleva so
     <>
       <ObjectInfoCard title="externalId" type="string" description="Requerido. ID de integración (Fudo/Toteat) del producto. Identifica producto y sucursal (plataforma auto-detectada)." />
       <ObjectInfoCard title="qty" type="number" description="Requerido. Nueva cantidad de stock." />
+      <ObjectInfoCard title="show" type="boolean" description="Opcional. Visibilidad del stock en esa sucursal (true/false). Si se omite, no se toca." required={false} />
     </>
   }
 />
 
-Cada item trae solo `externalId` + `qty`. **El `externalId` ya identifica la sucursal** (cada mapeo de integración guarda su sucursal), así que no se envía `sku` ni datos de sucursal. Los items inválidos, cuyo producto no exista, o cuyo `externalId` no tenga una sucursal con stock, no abortan el batch: se reportan en `data.errors` con `index`, `externalId` y el mensaje.
+Cada item trae `externalId` + `qty` (y `show` opcional). **El `externalId` ya identifica la sucursal** (cada mapeo de integración guarda su sucursal), así que no se envía `sku` ni datos de sucursal. Los items inválidos, cuyo producto no exista, o cuyo `externalId` no tenga una sucursal con stock, no abortan el batch: se reportan en `data.errors` con `index`, `externalId` y el mensaje.
 
 **Ejemplo.**
 
@@ -504,7 +506,7 @@ Cada item trae solo `externalId` + `qty`. **El `externalId` ya identifica la suc
 curl -v -X PUT
     --url 'https://api.public.lumarketo.cl/product/stock/batch'
     --header 'Authorization: Bearer <access_token>'
-    --data '{ "products": [{ "externalId": "777", "qty": 6000 }, { "externalId": "t-955", "qty": 30 }] }'
+    --data '{ "products": [{ "externalId": "777", "qty": 6000, "show": false }, { "externalId": "t-955", "qty": 30 }] }'
 ```
 
 La respuesta tiene el mismo formato que "Modificar productos en lote" (`{ updated, total, errors }`).
