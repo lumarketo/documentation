@@ -36,6 +36,10 @@ export const docsConfig: DocsConfig = {
           title: "Productos",
           href: "/docs/product",
         },
+        {
+          title: "Webhook",
+          href: "/docs/webhook",
+        },
       ],
     },
   ],
