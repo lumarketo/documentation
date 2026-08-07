@@ -28,72 +28,72 @@ Tu endpoint debe responder `2xx` para confirmar la recepción.
 
 ## Estructura del cuerpo
 
-<ObjectInfoCard title="store" type="object" description="Sucursal de la orden." content={
+<ObjectInfoCard title="store" type="object" description="Sucursal de la orden." hideBadge content={
   <>
-    <ObjectInfoCard title="externalId" type="string" description="extId de integración de la sucursal (o el id interno si no tiene extId)." required={false} />
+    <ObjectInfoCard title="externalId" type="string" description="extId de integración de la sucursal (o el id interno si no tiene extId)." hideBadge />
   </>
 } />
-<ObjectInfoCard title="internalOrderId" type="string" description="ID interno de la orden en NubeFood." required={false} />
-<ObjectInfoCard title="code" type="number" description="Número de orden correlativo de la empresa (companyOrderNumber)." required={false} />
-<ObjectInfoCard title="websiteId" type="string" description="ID de la empresa (company) dueña de la orden." required={false} />
-<ObjectInfoCard title="name" type="string" description="Nombre legible de la orden: '#{code} - {nombre cliente} - {deliveryType} - Nubefood'." required={false} />
-<ObjectInfoCard title="createdAt" type="string" description="Fecha de creación de la orden (ISO)." required={false} />
-<ObjectInfoCard title="deliveryType" type="string" description="'delivery' si la orden tiene envío; 'pickup' si es retiro." required={false} />
-<ObjectInfoCard title="amountToPay" type="number" description="Total a pagar de la orden (incluye envío)." required={false} />
-<ObjectInfoCard title="amount" type="number" description="Total de los productos, sin el costo de envío (total − deliveryFee)." required={false} />
-<ObjectInfoCard title="deliveryFee" type="number" description="Costo de envío." required={false} />
-<ObjectInfoCard title="couponDiscount" type="number" description="Descuento aplicado por cupón." required={false} />
-<ObjectInfoCard title="deliveryTime" type="string" description="Fecha/hora de entrega estimada (o '' si no aplica)." required={false} />
-<ObjectInfoCard title="isScheduled" type="boolean" description="true si la orden es programada." required={false} />
-<ObjectInfoCard title="scheduledDate" type="string" description="Fecha programada (solo presente si isScheduled = true)." required={false} />
+<ObjectInfoCard title="internalOrderId" type="string" description="ID interno de la orden en NubeFood." hideBadge />
+<ObjectInfoCard title="code" type="number" description="Número de orden correlativo de la empresa (companyOrderNumber)." hideBadge />
+<ObjectInfoCard title="websiteId" type="string" description="ID de la empresa (company) dueña de la orden." hideBadge />
+<ObjectInfoCard title="name" type="string" description="Nombre legible de la orden: '#{code} - {nombre cliente} - {deliveryType} - Nubefood'." hideBadge />
+<ObjectInfoCard title="createdAt" type="string" description="Fecha de creación de la orden (ISO)." hideBadge />
+<ObjectInfoCard title="deliveryType" type="string" description="'delivery' si la orden tiene envío; 'pickup' si es retiro." hideBadge />
+<ObjectInfoCard title="amountToPay" type="number" description="Total a pagar de la orden (incluye envío)." hideBadge />
+<ObjectInfoCard title="amount" type="number" description="Total de los productos, sin el costo de envío (total − deliveryFee)." hideBadge />
+<ObjectInfoCard title="deliveryFee" type="number" description="Costo de envío." hideBadge />
+<ObjectInfoCard title="couponDiscount" type="number" description="Descuento aplicado por cupón." hideBadge />
+<ObjectInfoCard title="deliveryTime" type="string" description="Fecha/hora de entrega estimada (o '' si no aplica)." hideBadge />
+<ObjectInfoCard title="isScheduled" type="boolean" description="true si la orden es programada." hideBadge />
+<ObjectInfoCard title="scheduledDate" type="string" description="Fecha programada (solo presente si isScheduled = true)." hideBadge />
 
-<ObjectInfoCard title="address" type="object" description="Dirección de entrega. Solo se incluye cuando deliveryType = 'delivery'." content={
+<ObjectInfoCard title="address" type="object" description="Dirección de entrega. Solo se incluye cuando deliveryType = 'delivery'." hideBadge content={
   <>
-    <ObjectInfoCard title="lat" type="number" description="Latitud." required={false} />
-    <ObjectInfoCard title="lng" type="number" description="Longitud." required={false} />
-    <ObjectInfoCard title="address" type="string" description="Dirección completa." required={false} />
-    <ObjectInfoCard title="streetNumber" type="string" description="Número." required={false} />
-    <ObjectInfoCard title="streetAddress" type="string" description="Calle." required={false} />
-    <ObjectInfoCard title="country" type="string" description="País." required={false} />
-    <ObjectInfoCard title="state" type="string" description="Región/estado." required={false} />
-    <ObjectInfoCard title="city" type="string" description="Ciudad." required={false} />
-    <ObjectInfoCard title="zipCode" type="string" description="Código postal." required={false} />
-    <ObjectInfoCard title="phoneNumber" type="string" description="Teléfono de contacto." required={false} />
-    <ObjectInfoCard title="details" type="string" description="Detalles adicionales (depto, referencia, etc.)." required={false} />
-  </>
-} />
-
-<ObjectInfoCard title="user" type="object" description="Datos del cliente." content={
-  <>
-    <ObjectInfoCard title="firstName" type="string" description="Nombre." required={false} />
-    <ObjectInfoCard title="lastName" type="string" description="Apellido." required={false} />
-    <ObjectInfoCard title="email" type="string" description="Email." required={false} />
-    <ObjectInfoCard title="phoneNumber" type="string" description="Teléfono." required={false} />
+    <ObjectInfoCard title="lat" type="number" description="Latitud." hideBadge />
+    <ObjectInfoCard title="lng" type="number" description="Longitud." hideBadge />
+    <ObjectInfoCard title="address" type="string" description="Dirección completa." hideBadge />
+    <ObjectInfoCard title="streetNumber" type="string" description="Número." hideBadge />
+    <ObjectInfoCard title="streetAddress" type="string" description="Calle." hideBadge />
+    <ObjectInfoCard title="country" type="string" description="País." hideBadge />
+    <ObjectInfoCard title="state" type="string" description="Región/estado." hideBadge />
+    <ObjectInfoCard title="city" type="string" description="Ciudad." hideBadge />
+    <ObjectInfoCard title="zipCode" type="string" description="Código postal." hideBadge />
+    <ObjectInfoCard title="phoneNumber" type="string" description="Teléfono de contacto." hideBadge />
+    <ObjectInfoCard title="details" type="string" description="Detalles adicionales (depto, referencia, etc.)." hideBadge />
   </>
 } />
 
-<ObjectInfoCard title="items" type="array" description="Productos de la orden." content={
+<ObjectInfoCard title="user" type="object" description="Datos del cliente." hideBadge content={
   <>
-    <ObjectInfoCard title="product" type="object" description="Producto." content={
+    <ObjectInfoCard title="firstName" type="string" description="Nombre." hideBadge />
+    <ObjectInfoCard title="lastName" type="string" description="Apellido." hideBadge />
+    <ObjectInfoCard title="email" type="string" description="Email." hideBadge />
+    <ObjectInfoCard title="phoneNumber" type="string" description="Teléfono." hideBadge />
+  </>
+} />
+
+<ObjectInfoCard title="items" type="array" description="Productos de la orden." hideBadge content={
+  <>
+    <ObjectInfoCard title="product" type="object" description="Producto." hideBadge content={
       <>
-        <ObjectInfoCard title="externalId" type="string" description="extId de integración del producto para esa sucursal. Es null si el ítem tiene modificadores/adicionales." required={false} />
-        <ObjectInfoCard title="name" type="string" description="Nombre del producto." required={false} />
+        <ObjectInfoCard title="externalId" type="string" description="extId de integración del producto para esa sucursal. Es null si el ítem tiene modificadores/adicionales." hideBadge />
+        <ObjectInfoCard title="name" type="string" description="Nombre del producto." hideBadge />
       </>
     } />
-    <ObjectInfoCard title="amount" type="number" description="Cantidad pedida del producto." required={false} />
-    <ObjectInfoCard title="comment" type="string" description="Instrucciones/comentario del ítem." required={false} />
-    <ObjectInfoCard title="unitPrice" type="number" description="Precio unitario final (con descuentos): bestPrice / cantidad." required={false} />
-    <ObjectInfoCard title="baseUnitPrice" type="number" description="Precio unitario de lista (sin descuentos): price / cantidad." required={false} />
-    <ObjectInfoCard title="productPrice" type="number" description="Precio final del ítem incluyendo adicionales (bestPrice + adicionales)." required={false} />
-    <ObjectInfoCard title="productBasePrice" type="number" description="Precio de lista del ítem incluyendo adicionales (price + adicionales)." required={false} />
-    <ObjectInfoCard title="modifiers" type="array" description="Adicionales/modificadores del ítem." content={
+    <ObjectInfoCard title="amount" type="number" description="Cantidad pedida del producto." hideBadge />
+    <ObjectInfoCard title="comment" type="string" description="Instrucciones/comentario del ítem." hideBadge />
+    <ObjectInfoCard title="unitPrice" type="number" description="Precio unitario final (con descuentos): bestPrice / cantidad." hideBadge />
+    <ObjectInfoCard title="baseUnitPrice" type="number" description="Precio unitario de lista (sin descuentos): price / cantidad." hideBadge />
+    <ObjectInfoCard title="productPrice" type="number" description="Precio final del ítem incluyendo adicionales (bestPrice + adicionales)." hideBadge />
+    <ObjectInfoCard title="productBasePrice" type="number" description="Precio de lista del ítem incluyendo adicionales (price + adicionales)." hideBadge />
+    <ObjectInfoCard title="modifiers" type="array" description="Adicionales/modificadores del ítem." hideBadge content={
       <>
-        <ObjectInfoCard title="externalId" type="string" description="Reservado (actualmente null a nivel modificador)." required={false} />
-        <ObjectInfoCard title="name" type="string" description="Nombre del modificador." required={false} />
-        <ObjectInfoCard title="shortName" type="string" description="Nombre corto del modificador." required={false} />
-        <ObjectInfoCard title="countById" type="object" description="Mapa { modifierId: cantidad }." required={false} />
-        <ObjectInfoCard title="countByExternalId" type="object" description="Mapa { extId: cantidad } (extId de integración del modificador para la sucursal)." required={false} />
-        <ObjectInfoCard title="options" type="array" description="Opciones del modificador: { optionId, externalId, name, price }." required={false} />
+        <ObjectInfoCard title="externalId" type="string" description="Reservado (actualmente null a nivel modificador)." hideBadge />
+        <ObjectInfoCard title="name" type="string" description="Nombre del modificador." hideBadge />
+        <ObjectInfoCard title="shortName" type="string" description="Nombre corto del modificador." hideBadge />
+        <ObjectInfoCard title="countById" type="object" description="Mapa { modifierId: cantidad }." hideBadge />
+        <ObjectInfoCard title="countByExternalId" type="object" description="Mapa { extId: cantidad } (extId de integración del modificador para la sucursal)." hideBadge />
+        <ObjectInfoCard title="options" type="array" description="Opciones del modificador: { optionId, externalId, name, price }." hideBadge />
       </>
     } />
   </>

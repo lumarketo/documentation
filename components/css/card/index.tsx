@@ -2,6 +2,7 @@ import * as React from "react"
 
 export const ObjectInfoCard = ({
   required = true,
+  hideBadge = false,
   type,
   title,
   description,
@@ -10,6 +11,7 @@ export const ObjectInfoCard = ({
   title: string
   type?: string
   required?: boolean
+  hideBadge?: boolean
   description?: string
   content?: React.ReactNode
 }) => {
@@ -36,7 +38,7 @@ export const ObjectInfoCard = ({
             </p>
           ) : null}
         </div>
-        {required ? (
+        {hideBadge ? null : required ? (
           <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-red-600 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400">
             <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
             Required
