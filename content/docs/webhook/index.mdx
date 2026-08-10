@@ -6,7 +6,50 @@ description:
 import { ResponseAccordionComponent } from "@/components/css/accordion"
 import { JsonViewer, ObjectInfoCard } from "@/components/css/card"
 
-Cuando una empresa tiene habilitado el **POS externo**, NubeFood notifica cada **orden** enviando un `POST` a la **URL de callback** que configuraste. Este documento describe **el payload que enviamos**.
+Cuando una empresa tiene habilitado el **POS externo**, NubeFood notifica cada **orden** enviando un `POST` a la **URL de callback** que configuraste. Este documento describe cómo **configurar** tu webhook y **el payload que enviamos**.
+
+## Configurar el webhook
+
+Podés configurar tu propio webhook (URL de callback + secret) con tu **access token** (`Authorization: Bearer <access token>`). El endpoint opera sobre el webhook de **tu empresa** (el `companyId` sale del token). Hay **un webhook por empresa**: `PUT` lo crea o lo **reemplaza**.
+
+<>
+  <div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
+    <div style={{ display: "inline-flex", backgroundColor: "#674ead", height: "20px", fontSize: "10px", alignItems: "center", borderRadius: "16px", justifyContent: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", paddingLeft: "12px", paddingRight: "12px", fontWeight: 600, color: "#fff" }}>PUT</div>
+    </div>
+    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.public.lumarketo.cl/webhook</h6>
+  </div>
+</>
+
+**Cuerpo de la consulta**
+
+<ObjectInfoCard title="callbackUrl" type="string" description="URL a la que enviaremos las notificaciones (http/https)." />
+<ObjectInfoCard title="secret" type="string" description="Secreto que enviaremos en el header x-webhook-secret. Enviá &quot;&quot; para limpiarlo; si se omite, se conserva el actual." required={false} />
+<ObjectInfoCard title="active" type="boolean" description="Habilita/deshabilita el envío (default true al crear)." required={false} />
+
+**Ejemplo.**
+
+```ts showLineNumbers /appDir: true/
+curl -v -X PUT
+    --url 'https://api.public.lumarketo.cl/webhook'
+    --header 'Authorization: Bearer <access_token>'
+    --data '{ "callbackUrl": "https://tu-pos.com/webhook", "secret": "un-secreto-compartido" }'
+```
+
+Respuesta: `{ success, message, data: { callbackUrl, active, hasSecret } }`.
+
+Para **consultar** la configuración actual (sin exponer el secret):
+
+<>
+  <div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
+    <div style={{ display: "inline-flex", backgroundColor: "green", height: "20px", fontSize: "10px", alignItems: "center", borderRadius: "16px", justifyContent: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", paddingLeft: "12px", paddingRight: "12px", fontWeight: 600, color: "#fff" }}>GET</div>
+    </div>
+    <h6 style={{ fontSize: 14, height: 30, marginLeft: 5 }}>https://api.public.lumarketo.cl/webhook</h6>
+  </div>
+</>
+
+Devuelve `{ callbackUrl, active, hasSecret }` (o `data: null` si no hay webhook configurado).
 
 ## La solicitud que enviamos
 
