@@ -333,7 +333,7 @@ los válidos y los descartados se informan en `data.errors`.
 <ObjectInfoCard
   title="products"
   type="array"
-  description="Arreglo de productos a actualizar (mínimo 1)"
+  description="Arreglo de productos a actualizar (mínimo 1, máximo 100 por request)"
   content={
     <>
       <ObjectInfoCard
@@ -513,7 +513,7 @@ Actualiza el stock de varios productos en una sola solicitud. Cada item lleva so
 <ObjectInfoCard
   title="products"
   type="array"
-  description="Arreglo de items a actualizar (mínimo 1)"
+  description="Arreglo de items a actualizar (mínimo 1, máximo 100 por request)"
   content={
     <>
       <ObjectInfoCard title="externalId" type="string" description="Requerido. ID de integración (Fudo/Toteat) del producto. Identifica producto y, por defecto, sucursal (plataforma auto-detectada)." />

@@ -26,6 +26,16 @@ Cuando una empresa tiene habilitado el **POS externo**, NubeFood notifica cada *
 
 Tu endpoint debe responder `2xx` para confirmar la recepción.
 
+### Validación de origen (header secreto)
+
+Si configuraste un **secret** para el webhook, cada request incluye el header:
+
+```
+x-webhook-secret: <tu-secret>
+```
+
+Validá ese header en tu endpoint y **rechazá** las solicitudes cuyo valor no coincida con el secret acordado. Si no configuraste un secret, el header no se envía.
+
 ## Estructura del cuerpo
 
 <ObjectInfoCard title="store" type="object" description="Sucursal de la orden." hideBadge content={

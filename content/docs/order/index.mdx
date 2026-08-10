@@ -117,6 +117,11 @@ curl -v -X GET
                   description="N° de orden del restaurant"
                 />
                 <ObjectInfoCard
+                  title="status"
+                  type="string"
+                  description="Estado del pedido."
+                />
+                <ObjectInfoCard
                   title="coupons"
                   type="array"
                   description="Cupones utilizados en la orden"
@@ -631,17 +636,21 @@ las solicitudes.
 
 **Parámetros de consulta**
 
-<ObjectInfoCard title="startDate" type="string" description="Fecha inicial" />
+<ObjectInfoCard title="startDate" type="string" description="Fecha inicial en formato YYYY-MM-DD. Se interpreta en zona horaria America/Santiago (Chile)." />
 
-<ObjectInfoCard title="endDate" type="string" description="Fecha final" />
+<ObjectInfoCard title="endDate" type="string" description="Fecha final en formato YYYY-MM-DD (America/Santiago). El rango máximo consultable es de 1 mes; endDate no puede ser anterior a startDate." />
+
+> **Rango máximo: 1 mes.** Si el rango supera un mes, o `endDate` es anterior a `startDate`, o el formato es inválido, la API responde **400**. Consultá por rangos acotados (recordá además el rate limit de este endpoint: 1 request cada 2 minutos).
 
 **Ejemplo.**
 
 ```ts showLineNumbers /appDir: true/
 curl -v -X GET
-    --url 'https://api.public.lumarketo.cl/order/all?startDate=2023/10/01&endDate=2023/10/08'
+    --url 'https://api.public.lumarketo.cl/order/all?startDate=2026-06-01&endDate=2026-06-30'
     --header 'Authorization: Bearer THwi13of2EHnPsSdfYmrB7Q17P6soi'
 ```
+
+> **Pedidos excluidos.** Este listado devuelve solo pedidos válidos: se **excluyen** los estados `cancel`, `payment-canceled`, `payment-pending`, `pending` y `picker-pending`. Es decir, las **anulaciones no aparecen** en los resultados (el pedido simplemente no se lista); tampoco se reportan devoluciones. El campo `status` refleja el estado de los pedidos que sí se devuelven.
 
 ### Respuestas
 
@@ -672,6 +681,11 @@ curl -v -X GET
                   title="orderNumber"
                   type="number"
                   description="N° de orden del restaurant"
+                />
+                <ObjectInfoCard
+                  title="status"
+                  type="string"
+                  description="Estado del pedido."
                 />
                 <ObjectInfoCard
                   title="coupons"
