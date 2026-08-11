@@ -65,7 +65,7 @@ Devuelve `{ callbackUrl, active, hasSecret }` (o `data: null` si no hay webhook 
 - **Método:** `POST`
 - **Content-Type:** `application/json`
 - **Cuerpo:** el objeto de la **orden normalizada** (ver estructura abajo).
-- **Disparo:** por cada orden nueva de la empresa (mientras el webhook esté activo).
+- **Disparo:** al crear/confirmar la orden y en **cada cambio de estado** (mientras el webhook esté activo). Cada notificación trae el snapshot de la orden con su `status` actual.
 
 Tu endpoint debe responder `2xx` para confirmar la recepción.
 
@@ -87,6 +87,7 @@ Validá ese header en tu endpoint y **rechazá** las solicitudes cuyo valor no c
   </>
 } />
 <ObjectInfoCard title="internalOrderId" type="string" description="ID interno de la orden en NubeFood." hideBadge />
+<ObjectInfoCard title="status" type="string" description="Estado actual de la orden en el momento de la notificación (cambia en cada cambio de estado). Ver 'Estados posibles' más abajo." hideBadge />
 <ObjectInfoCard title="code" type="number" description="Número de orden correlativo de la empresa (companyOrderNumber)." hideBadge />
 <ObjectInfoCard title="websiteId" type="string" description="ID de la empresa (company) dueña de la orden." hideBadge />
 <ObjectInfoCard title="name" type="string" description="Nombre legible de la orden: '#{code} - {nombre cliente} - {deliveryType} - Nubefood'." hideBadge />
@@ -152,12 +153,32 @@ Validá ese header en tu endpoint y **rechazá** las solicitudes cuyo valor no c
   </>
 } />
 
+## Estados posibles (`status`)
+
+El campo `status` puede tomar estos valores (ciclo de vida de la orden):
+
+| `status` | Significado |
+| --- | --- |
+| `pending` | Esperando confirmación del método de pago |
+| `payment-pending` | En espera del pago |
+| `payment-approved` | El pago fue aprobado |
+| `payment-canceled` | El pago fue cancelado u ocurrió un error |
+| `picker-pending` | Pendiente (por tomar) |
+| `inProcess` | En proceso (aceptada / en preparación) |
+| `ready` | Lista para despachar |
+| `routed` | En camino (delivery con el pedido) |
+| `dispatched` | Entregado |
+| `cancel` | Cancelada |
+| `refund` | Reembolsada |
+| `shippingError` | Error en el envío |
+
 ## Ejemplo
 
 ```json
 {
   "store": { "externalId": "1546626" },
   "internalOrderId": "652f0a1b2c3d4e5f60718293",
+  "status": "inProcess",
   "couponDiscount": 0,
   "amountToPay": 15900,
   "deliveryFee": 2500,
